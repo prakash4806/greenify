@@ -1,0 +1,150 @@
+import NextAuth from "next-auth"
+import GoogleProvider from "next-auth/providers/google"
+import type { NextAuthOptions } from "next-auth"
+
+// Validate environment variables
+const requiredEnvVars = {
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+  NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+  NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+}
+
+// Check for missing environment variables
+const missingVars = Object.entries(requiredEnvVars)
+  .filter(([key, value]) => !value)
+  .map(([key]) => key)
+
+if (missingVars.length > 0) {
+  console.error("❌ Missing required environment variables:", missingVars)
+  console.error("📋 Required variables:")
+  console.error("   GOOGLE_CLIENT_ID=<YOUR_GOOGLE_CLIENT_ID>")
+  console.error("   GOOGLE_CLIENT_SECRET=<YOUR_GOOGLE_CLIENT_SECRET>")
+  console.error("   NEXTAUTH_SECRET=<generate-a-32-character-secret>")
+  console.error("   NEXTAUTH_URL=http://localhost:3000")
+  throw new Error(`Missing required environment variables: ${missingVars.join(", ")}`)
+}
+
+console.log("✅ NextAuth environment variables validated successfully")
+console.log("🔑 Google Client ID:", process.env.GOOGLE_CLIENT_ID?.substring(0, 20) + "...")
+
+export const authOptions: NextAuthOptions = {
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+          scope: "openid email profile",
+        },
+      },
+      profile(profile) {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+        }
+      },
+    }),
+  ],
+  callbacks: {
+    async jwt({ token, account, user, profile }) {
+      // Persist the OAuth access_token and refresh_token to the token right after signin
+      if (account) {
+        token.accessToken = account.access_token
+        token.refreshToken = account.refresh_token
+        token.provider = account.provider
+      }
+      if (user) {
+        token.user = user
+      }
+      return token
+    },
+    async session({ session, token }) {
+      // Send properties to the client
+      if (token.user) {
+        session.user = token.user as any
+      }
+      // Add provider info to session
+      if (token.provider) {
+        session.provider = token.provider as string
+      }
+      return session
+    },
+    async signIn({ user, account, profile, email, credentials }) {
+      // Allow sign in for Google provider
+      if (account?.provider === "google") {
+        console.log("✅ Google sign-in successful for:", user.email)
+        return true
+      }
+      return true
+    },
+    async redirect({ url, baseUrl }) {
+      console.log("🔄 Redirect callback:", { url, baseUrl })
+
+      // Allows relative callback URLs
+      if (url.startsWith("/")) {
+        const redirectUrl = `${baseUrl}${url}`
+        console.log("✅ Redirecting to relative URL:", redirectUrl)
+        return redirectUrl
+      }
+
+      // Allows callback URLs on the same origin
+      if (new URL(url).origin === baseUrl) {
+        console.log("✅ Redirecting to same origin:", url)
+        return url
+      }
+
+      console.log("✅ Redirecting to base URL:", baseUrl)
+      return baseUrl
+    },
+  },
+  pages: {
+    signIn: "/auth",
+    error: "/auth",
+    signOut: "/auth",
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // 24 hours
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  debug: process.env.NODE_ENV === "development",
+  logger: {
+    error(code, metadata) {
+      console.error("🚨 NextAuth Error:", code, metadata)
+    },
+    warn(code) {
+      console.warn("⚠️ NextAuth Warning:", code)
+    },
+    debug(code, metadata) {
+      if (process.env.NODE_ENV === "development") {
+        console.log("🔍 NextAuth Debug:", code, metadata)
+      }
+    },
+  },
+  events: {
+    async signIn({ user, account, profile, isNewUser }) {
+      console.log("🎉 User signed in:", {
+        email: user.email,
+        provider: account?.provider,
+        isNewUser,
+      })
+    },
+    async signOut({ session, token }) {
+      console.log("👋 User signed out:", session?.user?.email)
+    },
+    async createUser({ user }) {
+      console.log("👤 New user created:", user.email)
+    },
+  },
+}
+
+const handler = NextAuth(authOptions)
+
+export { handler as GET, handler as POST }
