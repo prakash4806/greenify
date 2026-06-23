@@ -27,26 +27,26 @@ export function TestimonialsSection() {
   ]
 
   return (
-    <section className="py-20 bg-white dark:bg-gray-900 transition-colors duration-300">
+    <section className="py-12 bg-white dark:bg-gray-900 transition-colors duration-300">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">What Our Users Say</h2>
-          <p className="text-xl text-gray-600 dark:text-gray-300">Join thousands of satisfied gardeners and farmers</p>
+        <div className="text-center mb-10">
+          <h2 className="text-2xl lg:text-3xl font-extrabold text-gray-900 dark:text-white mb-3">What Our Users Say</h2>
+          <p className="text-sm md:text-base text-gray-600 dark:text-gray-300">Join thousands of satisfied gardeners and farmers</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((testimonial, index) => (
             <Card key={index} className="border-green-100 dark:border-gray-700 bg-white dark:bg-gray-800">
-              <CardContent className="p-6">
-                <div className="flex mb-4">
+              <CardContent className="p-5">
+                <div className="flex mb-3">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                    <Star key={i} className="h-4 w-4 text-yellow-400 fill-current" />
                   ))}
                 </div>
-                <p className="text-gray-600 dark:text-gray-300 mb-4 italic">"{testimonial.content}"</p>
+                <p className="text-xs md:text-sm text-gray-605 dark:text-gray-300 mb-3 italic">"{testimonial.content}"</p>
                 <div>
-                  <div className="font-semibold text-gray-900 dark:text-white">{testimonial.name}</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">{testimonial.role}</div>
+                  <div className="text-sm md:text-base font-bold text-gray-900 dark:text-white">{testimonial.name}</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">{testimonial.role}</div>
                 </div>
               </CardContent>
             </Card>

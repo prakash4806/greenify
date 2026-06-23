@@ -2,11 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import {
   Leaf,
-  Zap,
   ShieldCheck,
-  Users,
   Target,
-  TrendingUp,
   Camera,
   Brain,
   Cpu,
@@ -15,7 +12,6 @@ import {
   Lightbulb,
   Sprout,
   Globe,
-  Heart,
 } from "lucide-react"
 import Link from "next/link"
 
@@ -61,8 +57,8 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50/30 to-teal-50 dark:from-slate-900 dark:via-emerald-950/30 dark:to-teal-950 transition-colors duration-300">
-      {/* Hero Section - 100vh */}
-      <div className="h-screen flex items-center justify-center pt-16 relative overflow-hidden">
+      {/* Hero Section */}
+      <div className="min-h-[50vh] flex items-center justify-center pt-20 pb-10 lg:py-16 relative overflow-hidden">
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden -z-10">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-[#2C6455]/20 to-emerald-300/20 dark:from-emerald-400/10 dark:to-[#2C6455]/10 rounded-full blur-3xl"></div>
@@ -70,41 +66,41 @@ export default function AboutPage() {
         </div>
 
         <div className="w-full max-w-[90vw] mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-8 leading-tight">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight">
                 About Greenify
               </h1>
-              <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
+              <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl mx-auto">
                 Empowering gardeners, farmers, and plant enthusiasts with AI-powered disease detection and treatment solutions
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
-              <Card className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-white/40 dark:border-gray-700/40 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
-                <CardHeader>
-                  <CardTitle className="flex items-center text-gray-900 dark:text-white text-2xl">
-                    <Target className="mr-3 h-7 w-7 text-[#2C6455] dark:text-emerald-400" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+              <Card className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-white/40 dark:border-gray-700/40 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
+                <CardHeader className="p-5 pb-3">
+                  <CardTitle className="flex items-center text-gray-900 dark:text-white text-lg lg:text-xl font-bold">
+                    <Target className="mr-2 h-5 w-5 text-[#2C6455] dark:text-emerald-400" />
                     Our Mission
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+                <CardContent className="p-5 pt-0">
+                  <p className="text-gray-600 dark:text-gray-305 text-xs md:text-sm leading-relaxed">
                     To make advanced plant disease diagnosis accessible to everyone through cutting-edge AI technology,
                     empowering gardeners and farmers to maintain healthier plants and improve crop yields worldwide.
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-white/40 dark:border-gray-700/40 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
-                <CardHeader>
-                  <CardTitle className="flex items-center text-gray-900 dark:text-white text-2xl">
-                    <Leaf className="mr-3 h-7 w-7 text-[#2C6455] dark:text-emerald-400" />
+              <Card className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-white/40 dark:border-gray-700/40 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
+                <CardHeader className="p-5 pb-3">
+                  <CardTitle className="flex items-center text-gray-900 dark:text-white text-lg lg:text-xl font-bold">
+                    <Leaf className="mr-2 h-5 w-5 text-[#2C6455] dark:text-emerald-400" />
                     Our Vision
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+                <CardContent className="p-5 pt-0">
+                  <p className="text-gray-600 dark:text-gray-305 text-xs md:text-sm leading-relaxed">
                     A world where plant diseases are detected early and treated effectively through intelligent
                     technology, reducing crop loss and promoting sustainable agriculture for a healthier planet.
                   </p>
@@ -116,23 +112,23 @@ export default function AboutPage() {
       </div>
 
       {/* Why We Built Greenify */}
-      <div className="w-full max-w-[90vw] mx-auto px-4 py-20">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+      <div className="w-full max-w-[90vw] mx-auto px-4 py-12">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 dark:text-white mb-6 text-center">
             Why We Built Greenify
           </h2>
-          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-2xl p-8 lg:p-12 border border-white/40 dark:border-gray-700/40 shadow-xl">
-            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-xl p-6 lg:p-8 border border-white/40 dark:border-gray-700/40 shadow-lg">
+            <p className="text-xs md:text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
               Plant diseases are one of the biggest challenges facing agriculture today. Farmers and gardeners often
               struggle to identify diseases early, leading to significant crop losses and reduced yields. Traditional
               methods require expertise, time, and resources that aren't always accessible.
             </p>
-            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+            <p className="text-xs md:text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
               We realized that artificial intelligence could solve this problem. By combining computer vision and deep
               learning with agricultural expertise, we created Greenify—a tool that anyone can use to instantly diagnose
               plant diseases from a simple photo.
             </p>
-            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+            <p className="text-xs md:text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
               Our mission is to democratize plant health diagnostics, making expert-level disease detection available to
               everyone, everywhere. With Greenify, early detection leads to better treatment, healthier crops, and
               sustainable agriculture.
@@ -142,12 +138,12 @@ export default function AboutPage() {
       </div>
 
       {/* How Greenify Works */}
-      <div className="w-full max-w-[90vw] mx-auto px-4 py-20">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+      <div className="w-full max-w-[90vw] mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 dark:text-white mb-6 text-center">
             How Greenify Works
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
                 icon: Camera,
@@ -161,25 +157,25 @@ export default function AboutPage() {
               },
               {
                 icon: Check,
-                title: "Receive Diagnosis & Recommendations",
+                title: "Receive Diagnosis",
                 description: "Get detailed diagnosis, treatment options, and prevention strategies instantly.",
               },
             ].map((step, index) => (
               <div key={index} className="relative">
-                <Card className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-white/40 dark:border-gray-700/40 shadow-lg hover:shadow-xl transition-all duration-300 h-full">
-                  <CardHeader>
-                    <div className="w-14 h-14 bg-gradient-to-br from-[#2C6455]/20 to-emerald-300/20 dark:from-emerald-400/20 dark:to-[#2C6455]/20 rounded-lg flex items-center justify-center mb-4">
-                      <step.icon className="h-7 w-7 text-[#2C6455] dark:text-emerald-400" />
+                <Card className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-white/40 dark:border-gray-700/40 shadow-sm hover:shadow-md transition-all duration-300 h-full">
+                  <CardHeader className="p-5 pb-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-[#2C6455]/20 to-emerald-300/20 dark:from-emerald-400/20 dark:to-[#2C6455]/20 rounded-lg flex items-center justify-center mb-3">
+                      <step.icon className="h-5 w-5 text-[#2C6455] dark:text-emerald-400" />
                     </div>
-                    <CardTitle className="text-xl text-gray-900 dark:text-white">{step.title}</CardTitle>
+                    <CardTitle className="text-base md:text-lg text-gray-900 dark:text-white font-bold">{step.title}</CardTitle>
                   </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-600 dark:text-gray-300">{step.description}</p>
+                  <CardContent className="p-5 pt-0">
+                    <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{step.description}</p>
                   </CardContent>
                 </Card>
                 {index < 2 && (
-                  <div className="hidden md:flex absolute top-1/3 -right-4 items-center justify-center">
-                    <ArrowRight className="h-6 w-6 text-[#2C6455]/40 dark:text-emerald-400/40" />
+                  <div className="hidden md:flex absolute top-1/3 -right-3.5 items-center justify-center">
+                    <ArrowRight className="h-5 w-5 text-[#2C6455]/40 dark:text-emerald-400/40" />
                   </div>
                 )}
               </div>
@@ -189,25 +185,25 @@ export default function AboutPage() {
       </div>
 
       {/* Core Values */}
-      <div className="w-full max-w-[90vw] mx-auto px-4 py-20">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+      <div className="w-full max-w-[90vw] mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 dark:text-white mb-6 text-center">
             Our Core Values
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {coreValues.map((value, index) => (
               <Card
                 key={index}
-                className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-white/40 dark:border-gray-700/40 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-white/40 dark:border-gray-700/40 shadow-sm hover:shadow-md hover:scale-[1.02] transition-all duration-300"
               >
-                <CardHeader>
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#2C6455]/20 to-emerald-300/20 dark:from-emerald-400/20 dark:to-[#2C6455]/20 rounded-lg flex items-center justify-center mb-4">
-                    <value.icon className="h-6 w-6 text-[#2C6455] dark:text-emerald-400" />
+                <CardHeader className="p-4 pb-2.5">
+                  <div className="w-9 h-9 bg-gradient-to-br from-[#2C6455]/20 to-emerald-300/20 dark:from-emerald-400/20 dark:to-[#2C6455]/20 rounded-lg flex items-center justify-center mb-3">
+                    <value.icon className="h-4.5 w-4.5 text-[#2C6455] dark:text-emerald-400" />
                   </div>
-                  <CardTitle className="text-lg text-gray-900 dark:text-white">{value.title}</CardTitle>
+                  <CardTitle className="text-sm font-bold text-gray-900 dark:text-white">{value.title}</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">{value.description}</p>
+                <CardContent className="p-4 pt-0">
+                  <p className="text-gray-650 dark:text-gray-305 text-[11px] md:text-xs leading-relaxed">{value.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -216,30 +212,28 @@ export default function AboutPage() {
       </div>
 
       {/* Platform Highlights */}
-      <div className="w-full max-w-[90vw] mx-auto px-4 py-20">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+      <div className="w-full max-w-[90vw] mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 dark:text-white mb-6 text-center">
             Platform Highlights
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {highlights.map((highlight, index) => (
               <Card
                 key={index}
-                className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-white/40 dark:border-gray-700/40 shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-white/40 dark:border-gray-700/40 shadow-sm hover:shadow-md transition-all duration-300"
               >
-                <CardHeader>
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[#2C6455]/20 to-emerald-300/20 dark:from-emerald-400/20 dark:to-[#2C6455]/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
-                      <Check className="h-6 w-6 text-[#2C6455] dark:text-emerald-400" />
+                <CardHeader className="p-5 pb-3">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-[#2C6455]/20 to-emerald-300/20 dark:from-emerald-400/20 dark:to-[#2C6455]/20 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
+                      <Check className="h-5 w-5 text-[#2C6455] dark:text-emerald-400" />
                     </div>
                     <div>
-                      <CardTitle className="text-lg text-gray-900 dark:text-white">{highlight.title}</CardTitle>
+                      <CardTitle className="text-base font-bold text-gray-900 dark:text-white">{highlight.title}</CardTitle>
+                      <p className="text-xs md:text-sm text-gray-550 dark:text-gray-300 mt-1 leading-relaxed">{highlight.description}</p>
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent className="pl-16">
-                  <p className="text-gray-600 dark:text-gray-300">{highlight.description}</p>
-                </CardContent>
               </Card>
             ))}
           </div>
@@ -247,25 +241,25 @@ export default function AboutPage() {
       </div>
 
       {/* Technology Behind Greenify */}
-      <div className="w-full max-w-[90vw] mx-auto px-4 py-20">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+      <div className="w-full max-w-[90vw] mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 dark:text-white mb-6 text-center">
             Technology Behind Greenify
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {technologies.map((tech, index) => (
               <Card
                 key={index}
-                className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-white/40 dark:border-gray-700/40 shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-white/40 dark:border-gray-700/40 shadow-sm hover:shadow-md transition-all duration-300"
               >
-                <CardHeader>
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#2C6455]/20 to-emerald-300/20 dark:from-emerald-400/20 dark:to-[#2C6455]/20 rounded-lg flex items-center justify-center mb-4">
-                    <Cpu className="h-6 w-6 text-[#2C6455] dark:text-emerald-400" />
+                <CardHeader className="p-5 pb-3.5">
+                  <div className="w-10 h-10 bg-gradient-to-br from-[#2C6455]/20 to-emerald-300/20 dark:from-emerald-400/20 dark:to-[#2C6455]/20 rounded-lg flex items-center justify-center mb-3">
+                    <Cpu className="h-5 w-5 text-[#2C6455] dark:text-emerald-400" />
                   </div>
-                  <CardTitle className="text-lg text-gray-900 dark:text-white">{tech.name}</CardTitle>
+                  <CardTitle className="text-base font-bold text-gray-900 dark:text-white">{tech.name}</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-300">{tech.description}</p>
+                <CardContent className="p-5 pt-0">
+                  <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{tech.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -274,27 +268,27 @@ export default function AboutPage() {
       </div>
 
       {/* CTA Section */}
-      <div className="w-full max-w-[90vw] mx-auto px-4 py-20">
-        <div className="max-w-4xl mx-auto bg-gradient-to-r from-[#2C6455]/10 to-emerald-400/10 dark:from-emerald-400/20 dark:to-[#2C6455]/20 rounded-3xl p-12 lg:p-16 border border-[#2C6455]/20 dark:border-emerald-400/30 backdrop-blur-xl shadow-xl">
+      <div className="w-full max-w-[90vw] mx-auto px-4 py-12">
+        <div className="max-w-3xl mx-auto bg-gradient-to-r from-[#2C6455]/10 to-emerald-400/10 dark:from-emerald-400/20 dark:to-[#2C6455]/20 rounded-2xl p-8 lg:p-10 border border-[#2C6455]/20 dark:border-emerald-400/30 backdrop-blur-xl shadow-lg">
           <div className="text-center">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-gray-900 dark:text-white mb-4">
               Ready to Diagnose Your Plants?
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 mb-10 max-w-2xl mx-auto">
+            <p className="text-xs md:text-sm text-gray-600 dark:text-gray-300 mb-6 max-w-xl mx-auto leading-relaxed">
               Experience the power of AI-driven plant disease detection. Get accurate diagnoses and expert
               recommendations in seconds.
             </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/disease-detection">
-                <Button className="bg-gradient-to-r from-[#2C6455] to-emerald-600 hover:from-emerald-600 hover:to-[#2C6455] dark:from-emerald-500 dark:to-teal-500 dark:hover:from-teal-500 dark:hover:to-emerald-500 text-white px-10 py-4 rounded-lg font-medium transition-all duration-300 text-lg h-auto shadow-lg hover:shadow-xl">
+                <Button className="bg-gradient-to-r from-[#2C6455] to-emerald-600 hover:from-emerald-600 hover:to-[#2C6455] dark:from-emerald-500 dark:to-teal-500 dark:hover:from-teal-500 dark:hover:to-emerald-500 text-white h-10 px-5 rounded-lg font-semibold transition-all duration-300 text-sm shadow-md">
                   Try Disease Detection
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
               <Link href="/auth?tab=signup">
                 <Button
                   variant="outline"
-                  className="border-2 border-[#2C6455] dark:border-emerald-400 text-[#2C6455] dark:text-emerald-400 hover:bg-[#2C6455]/5 dark:hover:bg-emerald-400/10 px-10 py-4 rounded-lg font-medium transition-all duration-300 text-lg h-auto"
+                  className="border border-[#2C6455] dark:border-emerald-400 text-[#2C6455] dark:text-emerald-400 hover:bg-[#2C6455]/5 dark:hover:bg-emerald-400/10 h-10 px-5 rounded-lg font-semibold transition-all duration-300 text-sm bg-transparent"
                 >
                   Learn More
                 </Button>

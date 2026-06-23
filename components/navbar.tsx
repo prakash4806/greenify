@@ -38,21 +38,21 @@ export function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/40 dark:bg-gray-900/40 backdrop-blur-lg border-b border-white/10 dark:border-gray-800/10 shadow-sm">
       <div className="w-full max-w-[90vw] mx-auto px-6">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-14 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3">
-            <Leaf className="w-8 h-8 text-green-600 dark:text-emerald-400" />
-            <span className="text-xl font-bold text-gray-900 dark:text-white">Greenify</span>
+          <Link href="/" className="flex items-center space-x-2">
+            <Leaf className="w-6 h-6 text-green-600 dark:text-emerald-400" />
+            <span className="text-lg font-bold text-gray-900 dark:text-white">Greenify</span>
           </Link>
 
           {/* Desktop Navigation */}
           {!isAuthPage && (
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="hidden md:flex items-center space-x-6">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-gray-700 dark:text-gray-300 hover:text-[#2C6455] dark:hover:text-[#2C6455] transition-colors font-medium"
+                  className="text-gray-700 dark:text-gray-300 hover:text-[#2C6455] dark:hover:text-[#2C6455] transition-colors text-xs md:text-sm font-semibold"
                 >
                   {link.label}
                 </Link>
@@ -66,19 +66,19 @@ export function Navbar() {
 
             {isAuthPage ? (
               <Link href="/">
-                <Button variant="ghost" className="text-gray-700 dark:text-gray-300 hover:text-[#2C6455] dark:hover:text-emerald-400">
+                <Button variant="ghost" size="sm" className="text-gray-700 dark:text-gray-300 hover:text-[#2C6455] dark:hover:text-emerald-400">
                   Back to Home
                 </Button>
               </Link>
             ) : status === "loading" ? (
-              <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+              <div className="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
             ) : session ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                    <Avatar className="h-10 w-10">
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
                       <AvatarImage src={session.user?.image || ""} alt={session.user?.name || ""} />
-                      <AvatarFallback className="bg-[#2C6455] text-white">
+                      <AvatarFallback className="bg-[#2C6455] text-white text-xs">
                         {session.user?.name?.charAt(0) || "U"}
                       </AvatarFallback>
                     </Avatar>
@@ -114,12 +114,12 @@ export function Navbar() {
             ) : (
               <>
                 <Link href="/auth?tab=login">
-                  <Button variant="outline" className="border-[#2C6455] text-[#2C6455] hover:bg-[#2C6455]/10 px-6 py-2">
+                  <Button variant="outline" size="sm" className="border-[#2C6455] text-[#2C6455] hover:bg-[#2C6455]/10 px-4">
                     Login
                   </Button>
                 </Link>
                 <Link href="/auth?tab=signup">
-                  <Button className="bg-gradient-to-r from-[#2C6455] to-[#1a3d35] hover:from-[#1a3d35] hover:to-[#2C6455] text-white px-6 py-2 rounded-lg font-medium shadow-lg">
+                  <Button size="sm" className="bg-gradient-to-r from-[#2C6455] to-[#1a3d35] hover:from-[#1a3d35] hover:to-[#2C6455] text-white px-4 rounded-lg font-semibold shadow-md">
                     Sign Up
                   </Button>
                 </Link>

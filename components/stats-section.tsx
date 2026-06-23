@@ -7,25 +7,25 @@ export function StatsSection() {
   ]
 
   return (
-    <section className="py-20 bg-green-50 dark:bg-gray-800 transition-colors duration-300">
+    <section className="py-12 bg-green-50 dark:bg-gray-800 transition-colors duration-300">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        <div className="text-center mb-10">
+          <h2 className="text-2xl lg:text-3xl font-extrabold text-gray-900 dark:text-white mb-3">
             Trusted by Gardeners Worldwide
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-300">
+          <p className="text-sm md:text-base text-gray-600 dark:text-gray-300">
             Our AI technology delivers consistent, reliable results
           </p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
-              <div className="text-4xl lg:text-5xl font-bold text-green-600 dark:text-emerald-400 mb-2">
+              <div className="text-3xl lg:text-4xl font-extrabold text-green-600 dark:text-emerald-400 mb-1.5">
                 {stat.number}
               </div>
-              <div className="text-xl font-semibold text-gray-900 dark:text-white mb-1">{stat.label}</div>
-              <div className="text-gray-600 dark:text-gray-400">{stat.description}</div>
+              <div className="text-base md:text-lg font-bold text-gray-900 dark:text-white mb-0.5">{stat.label}</div>
+              <div className="text-xs md:text-sm text-gray-600 dark:text-gray-400">{stat.description}</div>
             </div>
           ))}
         </div>

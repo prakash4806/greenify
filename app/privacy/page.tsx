@@ -117,56 +117,56 @@ export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50/30 to-teal-50 dark:from-slate-900 dark:via-emerald-950/30 dark:to-teal-950 transition-colors duration-300">
       {/* Header Section */}
-      <div className="w-full max-w-[90vw] mx-auto px-4 pt-24 pb-16">
+      <div className="w-full max-w-[90vw] mx-auto px-4 pt-20 pb-10">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-3">
             Privacy Policy
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
+          <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
             Last Updated: June 2026
           </p>
-          <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
+          <p className="text-gray-700 dark:text-gray-300 text-sm md:text-base leading-relaxed">
             At Greenify, we value your privacy and are committed to protecting your personal information. By accessing or using Greenify, you agree to the practices described in this Privacy Policy.
           </p>
         </div>
       </div>
 
       {/* Content Section */}
-      <div className="w-full max-w-[90vw] mx-auto px-4 pb-20">
+      <div className="w-full max-w-[90vw] mx-auto px-4 pb-12">
         <div className="max-w-4xl mx-auto">
           {sections.map((section, index) => (
-            <div key={index} className="mb-12">
-              <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-2xl p-8 border border-white/40 dark:border-gray-700/40 shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="flex items-start gap-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#2C6455]/20 to-emerald-300/20 dark:from-emerald-400/20 dark:to-[#2C6455]/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-lg font-bold text-[#2C6455] dark:text-emerald-400">
+            <div key={index} className="mb-8">
+              <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl rounded-xl p-6 border border-white/40 dark:border-gray-700/40 shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-gradient-to-br from-[#2C6455]/20 to-emerald-300/20 dark:from-emerald-400/20 dark:to-[#2C6455]/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <span className="text-base font-bold text-[#2C6455] dark:text-emerald-400">
                       {section.number}
                     </span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
                       {section.title}
                     </h2>
                     {section.content && (
-                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-base whitespace-pre-line mb-4">
+                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-xs md:text-sm whitespace-pre-line mb-3">
                         {section.content}
                       </p>
                     )}
                     {section.subsections &&
                       section.subsections.map((subsection, subIndex) => (
-                        <div key={subIndex} className="mb-6">
+                        <div key={subIndex} className="mb-4">
                           {subsection.subtitle && (
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                            <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1.5">
                               {subsection.subtitle}
                             </h3>
                           )}
                           {subsection.content && (
-                            <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-base whitespace-pre-line mb-4">
+                            <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-xs md:text-sm whitespace-pre-line mb-3">
                               {subsection.content}
                             </p>
                           )}
                           {subsection.items && (
-                            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 leading-relaxed text-base space-y-1">
+                            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 leading-relaxed text-xs md:text-sm space-y-0.5">
                               {subsection.items.map((item, itemIndex) => (
                                 <li key={itemIndex}>{item}</li>
                               ))}
@@ -181,22 +181,22 @@ export default function PrivacyPage() {
           ))}
 
           {/* CTA Section */}
-          <div className="bg-gradient-to-r from-[#2C6455]/10 to-emerald-400/10 dark:from-emerald-400/20 dark:to-[#2C6455]/20 rounded-3xl p-12 border border-[#2C6455]/20 dark:border-emerald-400/30 backdrop-blur-xl shadow-xl">
+          <div className="bg-gradient-to-r from-[#2C6455]/10 to-emerald-400/10 dark:from-emerald-400/20 dark:to-[#2C6455]/20 rounded-2xl p-8 border border-[#2C6455]/20 dark:border-emerald-400/30 backdrop-blur-xl shadow-xl">
             <div className="text-center max-w-2xl mx-auto">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                 Your Privacy Matters
               </h2>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-xs md:text-sm mb-5">
                 We are committed to protecting your privacy and ensuring transparency in how we handle your data. If you have any questions, please don't hesitate to contact us.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link href="/">
-                  <button className="px-8 py-3 bg-gradient-to-r from-[#2C6455] to-emerald-600 hover:from-emerald-600 hover:to-[#2C6455] dark:from-emerald-500 dark:to-teal-500 dark:hover:from-teal-500 dark:hover:to-emerald-500 text-white rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-xl">
+                  <button className="px-6 py-2 bg-gradient-to-r from-[#2C6455] to-emerald-600 hover:from-emerald-600 hover:to-[#2C6455] dark:from-emerald-500 dark:to-teal-500 dark:hover:from-teal-500 dark:hover:to-emerald-500 text-white rounded-lg text-xs font-semibold h-9 transition-all duration-300 shadow-md hover:shadow-lg">
                     Return to Home
                   </button>
                 </Link>
                 <Link href="/contact">
-                  <button className="px-8 py-3 border-2 border-[#2C6455] dark:border-emerald-400 text-[#2C6455] dark:text-emerald-400 hover:bg-[#2C6455]/5 dark:hover:bg-emerald-400/10 rounded-lg font-medium transition-all duration-300">
+                  <button className="px-6 py-2 border border-[#2C6455] dark:border-emerald-400 text-[#2C6455] dark:text-emerald-400 hover:bg-[#2C6455]/5 dark:hover:bg-emerald-400/10 rounded-lg text-xs font-semibold h-9 transition-all duration-300">
                     Contact Support
                   </button>
                 </Link>

@@ -1136,51 +1136,51 @@ export default function DiseaseDetailPage({ params }: PageProps) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 pt-24 fade-in">
+    <div className="container mx-auto px-4 py-6 pt-20 fade-in">
       <div className="max-w-4xl mx-auto">
         {/* Back Button */}
         <Link href="/disease-info">
-          <Button variant="outline" className="mb-6">
-            <ArrowLeft className="mr-2 h-4 w-4" />
+          <Button variant="outline" size="sm" className="mb-4 h-8 text-xs">
+            <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
             Back to Disease Info
           </Button>
         </Link>
 
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-              <disease.icon className="h-6 w-6 text-green-600" />
+        <div className="mb-6">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+              <disease.icon className="h-5 w-5 text-green-600" />
             </div>
             <div>
-              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">{disease.name}</h1>
-              <p className="text-lg text-gray-600">
+              <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">{disease.name}</h1>
+              <p className="text-sm text-gray-600">
                 {disease.plant} • <em>{disease.scientificName}</em>
               </p>
             </div>
-            <Badge className={getSeverityColor(disease.severity)}>
+            <Badge className={`text-xs px-2 py-0.5 ${getSeverityColor(disease.severity)}`}>
               {getSeverityIcon(disease.severity)}
               <span className="ml-1">{disease.severity} Risk</span>
             </Badge>
           </div>
-          <p className="text-gray-700 text-lg leading-relaxed">{disease.description}</p>
+          <p className="text-gray-700 text-sm md:text-base leading-relaxed">{disease.description}</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           {/* Symptoms */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center text-red-700">
-                <AlertTriangle className="mr-2 h-5 w-5" />
+            <CardHeader className="p-4 pb-2">
+              <CardTitle className="flex items-center text-sm font-bold text-red-700">
+                <AlertTriangle className="mr-1.5 h-4 w-4" />
                 Symptoms
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
+            <CardContent className="p-4 pt-1">
+              <ul className="space-y-1.5">
                 {disease.symptoms.map((symptom: string, index: number) => (
                   <li key={index} className="flex items-start">
-                    <div className="w-2 h-2 bg-red-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                    <span className="text-gray-700">{symptom}</span>
+                    <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-1.5 mr-2 flex-shrink-0"></div>
+                    <span className="text-xs md:text-sm text-gray-700">{symptom}</span>
                   </li>
                 ))}
               </ul>
@@ -1189,18 +1189,18 @@ export default function DiseaseDetailPage({ params }: PageProps) {
 
           {/* Causes */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center text-orange-700">
-                <Info className="mr-2 h-5 w-5" />
+            <CardHeader className="p-4 pb-2">
+              <CardTitle className="flex items-center text-sm font-bold text-orange-700">
+                <Info className="mr-1.5 h-4 w-4" />
                 Causes & Risk Factors
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
+            <CardContent className="p-4 pt-1">
+              <ul className="space-y-1.5">
                 {disease.causes.map((cause: string, index: number) => (
                   <li key={index} className="flex items-start">
-                    <div className="w-2 h-2 bg-orange-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                    <span className="text-gray-700">{cause}</span>
+                    <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-1.5 mr-2 flex-shrink-0"></div>
+                    <span className="text-xs md:text-sm text-gray-700">{cause}</span>
                   </li>
                 ))}
               </ul>
@@ -1209,18 +1209,18 @@ export default function DiseaseDetailPage({ params }: PageProps) {
 
           {/* Treatment */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center text-blue-700">
-                <CheckCircle className="mr-2 h-5 w-5" />
+            <CardHeader className="p-4 pb-2">
+              <CardTitle className="flex items-center text-sm font-bold text-blue-700">
+                <CheckCircle className="mr-1.5 h-4 w-4" />
                 Treatment Options
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
+            <CardContent className="p-4 pt-1">
+              <ul className="space-y-1.5">
                 {disease.treatment.map((treatment: string, index: number) => (
                   <li key={index} className="flex items-start">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                    <span className="text-gray-700">{treatment}</span>
+                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 mr-2 flex-shrink-0"></div>
+                    <span className="text-xs md:text-sm text-gray-700">{treatment}</span>
                   </li>
                 ))}
               </ul>
@@ -1229,18 +1229,18 @@ export default function DiseaseDetailPage({ params }: PageProps) {
 
           {/* Prevention */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center text-green-700">
-                <Leaf className="mr-2 h-5 w-5" />
+            <CardHeader className="p-4 pb-2">
+              <CardTitle className="flex items-center text-sm font-bold text-green-700">
+                <Leaf className="mr-1.5 h-4 w-4" />
                 Prevention Strategies
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
+            <CardContent className="p-4 pt-1">
+              <ul className="space-y-1.5">
                 {disease.prevention.map((prevention: string, index: number) => (
                   <li key={index} className="flex items-start">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                    <span className="text-gray-700">{prevention}</span>
+                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-1.5 mr-2 flex-shrink-0"></div>
+                    <span className="text-xs md:text-sm text-gray-700">{prevention}</span>
                   </li>
                 ))}
               </ul>
@@ -1249,20 +1249,20 @@ export default function DiseaseDetailPage({ params }: PageProps) {
         </div>
 
         {/* Call to Action */}
-        <Alert className="mt-8">
+        <Alert className="mt-6 py-2.5 px-3">
           <Info className="h-4 w-4" />
-          <AlertDescription>
+          <AlertDescription className="text-xs text-gray-700">
             <strong>Need help identifying this disease?</strong> Use our AI-powered disease detection tool to analyze
             your plant photos and get instant diagnosis with treatment recommendations.
           </AlertDescription>
         </Alert>
 
-        <div className="flex flex-col sm:flex-row gap-4 mt-6">
+        <div className="flex flex-col sm:flex-row gap-3 mt-4">
           <Link href="/disease-detection">
-            <Button className="bg-green-600 hover:bg-green-700 flex-1 sm:flex-none">Diagnose Your Plant</Button>
+            <Button size="sm" className="h-9 text-xs bg-green-600 hover:bg-green-700 flex-1 sm:flex-none">Diagnose Your Plant</Button>
           </Link>
           <Link href="/contact">
-            <Button variant="outline" className="flex-1 sm:flex-none">
+            <Button size="sm" variant="outline" className="h-9 text-xs flex-1 sm:flex-none">
               Contact Expert
             </Button>
           </Link>
