@@ -16,17 +16,13 @@ const missingVars = Object.entries(requiredEnvVars)
   .map(([key]) => key)
 
 if (missingVars.length > 0) {
-  console.error("❌ Missing required environment variables:", missingVars)
-  console.error("📋 Required variables:")
-  console.error("   GOOGLE_CLIENT_ID=<YOUR_GOOGLE_CLIENT_ID>")
-  console.error("   GOOGLE_CLIENT_SECRET=<YOUR_GOOGLE_CLIENT_SECRET>")
-  console.error("   NEXTAUTH_SECRET=<generate-a-32-character-secret>")
-  console.error("   NEXTAUTH_URL=http://localhost:3000")
-  throw new Error(`Missing required environment variables: ${missingVars.join(", ")}`)
+  console.warn("⚠️ Warning: Missing environment variables at build-time:", missingVars)
+  console.warn("📋 Make sure these are configured in your runtime/deployment environment (.env.local):")
+  console.warn("   GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET, NEXTAUTH_URL")
+} else {
+  console.log("✅ NextAuth environment variables validated successfully")
+  console.log("🔑 Google Client ID:", process.env.GOOGLE_CLIENT_ID?.substring(0, 20) + "...")
 }
-
-console.log("✅ NextAuth environment variables validated successfully")
-console.log("🔑 Google Client ID:", process.env.GOOGLE_CLIENT_ID?.substring(0, 20) + "...")
 
 export const authOptions: NextAuthOptions = {
   providers: [
