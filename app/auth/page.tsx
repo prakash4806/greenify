@@ -69,6 +69,9 @@ export default function AuthPage() {
         provider: "google",
         options: {
           redirectTo: `${window.location.origin}/auth/callback?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+          queryParams: {
+            prompt: "select_account",
+          },
         },
       })
 
