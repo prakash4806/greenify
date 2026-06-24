@@ -10,13 +10,20 @@ import { Camera, Upload, ImageIcon, Loader2, CheckCircle, AlertTriangle, Info } 
 import Image from "next/image"
 import { analyzePlantImage, type PlantAnalysisResult } from "@/app/actions/analyze-plant"
 import { compressImage } from "@/lib/image-utils"
+import { toast } from "sonner"
+import { createClient } from "@/lib/supabase/client"
+import { useSession } from "@/components/session-provider"
 
 export default function DiseaseDetectionPage() {
+  const { data: session } = useSession()
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [results, setResults] = useState<PlantAnalysisResult | null>(null)
   const [analysisProgress, setAnalysisProgress] = useState("")
+  const [plantNameInput, setPlantNameInput] = useState("")
+  const [isSaving, setIsSaving] = useState(false)
+  const [isSaved, setIsSaved] = useState(false)
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -66,6 +73,31 @@ export default function DiseaseDetectionPage() {
 
       setResults(result)
       setAnalysisProgress("")
+
+      // Prepopulate plant name default values
+      if (result.success && result.disease) {
+        const label = result.disease.toLowerCase()
+        let defaultPlant = "Plant"
+        if (label.includes("tomato") || label.includes("blight") || label.includes("spot")) {
+          defaultPlant = "Tomato Plant"
+        } else if (label.includes("apple")) {
+          defaultPlant = "Apple Tree"
+        } else if (label.includes("grape")) {
+          defaultPlant = "Grape Vine"
+        } else if (label.includes("rose")) {
+          defaultPlant = "Rose Bush"
+        } else if (label.includes("cherry")) {
+          defaultPlant = "Cherry Tree"
+        } else if (label.includes("peach")) {
+          defaultPlant = "Peach Tree"
+        } else if (label.includes("pepper")) {
+          defaultPlant = "Pepper Plant"
+        } else if (label.includes("potato")) {
+          defaultPlant = "Potato Plant"
+        }
+        setPlantNameInput(defaultPlant)
+        setIsSaved(false)
+      }
     } catch (error) {
       console.error("Analysis error:", error)
       setResults({
@@ -75,6 +107,37 @@ export default function DiseaseDetectionPage() {
     } finally {
       setIsAnalyzing(false)
       setAnalysisProgress("")
+    }
+  }
+
+  const handleSaveToDashboard = async () => {
+    if (!results || !selectedImage) return
+
+    if (!session?.user?.id) {
+      toast.error("You must be logged in to save diagnoses to your dashboard.")
+      return
+    }
+
+    setIsSaving(true)
+    try {
+      const supabase = createClient()
+      const { error: dbError } = await supabase.from("diagnoses").insert({
+        user_id: session.user.id,
+        plant_name: plantNameInput || "Unknown Plant",
+        disease_name: results.disease || "Unknown Disease",
+        confidence: results.confidence || 0,
+        image_url: results.imageUrl || selectedImage,
+      })
+
+      if (dbError) throw dbError
+
+      setIsSaved(true)
+      toast.success("Diagnosis successfully saved to your dashboard!")
+    } catch (err: any) {
+      console.error("Error saving diagnosis:", err)
+      toast.error(err.message || "Failed to save diagnosis.")
+    } finally {
+      setIsSaving(false)
     }
   }
 
@@ -326,12 +389,38 @@ export default function DiseaseDetectionPage() {
                           </div>
                         )}
 
-                        <div className="flex gap-2 pt-2">
+                        {/* Plant Label Input */}
+                        <div className="space-y-1.5 pt-2">
+                          <label className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                            Plant Name / Label
+                          </label>
+                          <input
+                            type="text"
+                            value={plantNameInput}
+                            onChange={(e) => setPlantNameInput(e.target.value)}
+                            disabled={isSaving || isSaved}
+                            placeholder="e.g. Tomato Plant, Backyard Apple Tree"
+                            className="w-full text-xs px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-md focus:outline-none focus:ring-1 focus:ring-[#2C6455] disabled:opacity-50"
+                          />
+                        </div>
+
+                        <div className="flex gap-2 pt-1.5">
                           <Button
+                            onClick={handleSaveToDashboard}
+                            disabled={isSaving || isSaved}
                             variant="outline"
-                            className="flex-1 h-9 text-xs border-[#2C6455]/30 dark:border-emerald-400/30 text-[#2C6455] dark:text-emerald-400 hover:bg-[#2C6455]/10 dark:hover:bg-emerald-400/10"
+                            className="flex-1 h-9 text-xs border-[#2C6455]/30 dark:border-emerald-400/30 text-[#2C6455] dark:text-emerald-400 hover:bg-[#2C6455]/10 dark:hover:bg-emerald-400/10 disabled:opacity-50"
                           >
-                            Save to Dashboard
+                            {isSaving ? (
+                              <>
+                                <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+                                Saving...
+                              </>
+                            ) : isSaved ? (
+                              "Saved to Dashboard"
+                            ) : (
+                              "Save to Dashboard"
+                            )}
                           </Button>
                           <Button className="flex-1 h-9 text-xs bg-gradient-to-r from-[#2C6455] to-[#1a3d35] hover:from-[#1a3d35] hover:to-[#2C6455] dark:from-emerald-500 dark:to-teal-500 dark:hover:from-teal-500 dark:hover:to-emerald-500">
                             Get Expert Consultation

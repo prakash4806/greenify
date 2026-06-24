@@ -16,6 +16,7 @@ export interface PlantAnalysisResult {
   prevention?: string
   symptoms?: string[]
   causes?: string[]
+  imageUrl?: string
   error?: string
 }
 
@@ -52,6 +53,7 @@ export async function analyzePlantImage(imageData: string): Promise<PlantAnalysi
         prevention: diseaseInfo.prevention,
         symptoms: diseaseInfo.symptoms,
         causes: diseaseInfo.causes,
+        imageUrl: imageUrl,
       }
     } else {
       return {
@@ -63,6 +65,7 @@ export async function analyzePlantImage(imageData: string): Promise<PlantAnalysi
         prevention: "Maintain proper watering, lighting, and nutrition to keep your plant healthy.",
         symptoms: [],
         causes: [],
+        imageUrl: imageUrl,
       }
     }
   } catch (error) {

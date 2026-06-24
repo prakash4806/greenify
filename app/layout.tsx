@@ -8,6 +8,7 @@ import { Preloader } from "@/components/preloader"
 import { ScrollToTop } from "@/components/scroll-to-top"
 import { ThemeProvider } from "@/components/theme-provider"
 import { AuthSessionProvider } from "@/components/session-provider"
+import { Toaster } from "@/components/ui/sonner"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -33,6 +34,7 @@ export default function RootLayout({
             <main className="min-h-screen">{children}</main>
             <Footer />
             <ScrollToTop />
+            <Toaster />
           </ThemeProvider>
         </AuthSessionProvider>
       </body>

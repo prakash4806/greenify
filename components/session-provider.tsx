@@ -24,11 +24,27 @@ export function AuthSessionProvider({ children }: { children: React.ReactNode })
   const supabase = createClient()
 
   useEffect(() => {
+    const syncProfile = async (u: User) => {
+      try {
+        await supabase.from("profiles").upsert({
+          id: u.id,
+          full_name: u.user_metadata?.full_name || u.email?.split("@")[0],
+          email: u.email,
+          avatar_url: u.user_metadata?.avatar_url || u.user_metadata?.picture,
+        })
+      } catch (err) {
+        console.error("Error syncing profile:", err)
+      }
+    }
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
       setUser(session?.user ?? null)
       setStatus(session ? "authenticated" : "unauthenticated")
+      if (session?.user) {
+        syncProfile(session.user)
+      }
     })
 
     // Listen for auth changes
@@ -36,6 +52,9 @@ export function AuthSessionProvider({ children }: { children: React.ReactNode })
       setSession(session)
       setUser(session?.user ?? null)
       setStatus(session ? "authenticated" : "unauthenticated")
+      if (session?.user) {
+        syncProfile(session.user)
+      }
     })
 
     return () => {
@@ -59,9 +78,11 @@ export function useSession() {
   return {
     data: context.session ? {
       user: {
+        id: context.user?.id,
         name: context.user?.user_metadata?.full_name || context.user?.email?.split("@")[0],
         email: context.user?.email,
-        image: context.user?.user_metadata?.avatar_url,
+        image: context.user?.user_metadata?.avatar_url || context.user?.user_metadata?.picture,
+        createdAt: context.user?.created_at,
       }
     } : null,
     status: context.status,
