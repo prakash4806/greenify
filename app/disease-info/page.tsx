@@ -23,10 +23,6 @@ export default function DiseaseInfoPage() {
       ],
     },
     {
-      plant: "Cherry",
-      diseases: [{ name: "Powdery Mildew", severity: "Medium", slug: "cherry-powdery-mildew", icon: Droplets }],
-    },
-    {
       plant: "Corn",
       diseases: [
         { name: "Cercospora Leaf Spot", severity: "Medium", slug: "corn-cercospora-leaf-spot", icon: Leaf },
@@ -43,6 +39,17 @@ export default function DiseaseInfoPage() {
       ],
     },
     {
+      plant: "Potato",
+      diseases: [
+        { name: "Early Blight", severity: "High", slug: "potato-early-blight", icon: Bug },
+        { name: "Late Blight", severity: "Critical", slug: "potato-late-blight", icon: Droplets },
+      ],
+    },
+    {
+      plant: "Cherry",
+      diseases: [{ name: "Powdery Mildew", severity: "Medium", slug: "cherry-powdery-mildew", icon: Droplets }],
+    },
+    {
       plant: "Orange",
       diseases: [
         { name: "Huanglongbing (Citrus Greening)", severity: "Critical", slug: "orange-huanglongbing", icon: Bug },
@@ -55,13 +62,6 @@ export default function DiseaseInfoPage() {
     {
       plant: "Pepper",
       diseases: [{ name: "Bacterial Spot", severity: "High", slug: "pepper-bacterial-spot", icon: Bug }],
-    },
-    {
-      plant: "Potato",
-      diseases: [
-        { name: "Early Blight", severity: "High", slug: "potato-early-blight", icon: Bug },
-        { name: "Late Blight", severity: "Critical", slug: "potato-late-blight", icon: Droplets },
-      ],
     },
     {
       plant: "Squash",
@@ -175,7 +175,9 @@ export default function DiseaseInfoPage() {
             {filteredPlants.map((plant, index) => (
               <Card
                 key={index}
-                className="hover:shadow-lg transition-all duration-300 border-green-100 dark:border-gray-700 bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl hover:scale-[1.02]"
+                className={`hover:shadow-lg transition-all duration-300 border-green-100 dark:border-gray-700 bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl hover:scale-[1.02] ${
+                  plant.plant === "Tomato" ? "lg:col-span-2" : ""
+                }`}
               >
                 <CardHeader className="p-5 pb-3 bg-green-50/70 dark:bg-emerald-950/20">
                   <CardTitle className="flex items-center text-base font-semibold text-green-800 dark:text-emerald-400">
