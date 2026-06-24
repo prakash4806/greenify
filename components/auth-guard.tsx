@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useSession } from "next-auth/react"
+import { useSession } from "@/components/session-provider"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 

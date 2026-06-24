@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
-import { signIn, getSession } from "next-auth/react"
+import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
@@ -26,6 +26,7 @@ export default function AuthPage() {
 
   const searchParams = useSearchParams()
   const router = useRouter()
+  const supabase = createClient()
 
   useEffect(() => {
     // Check for authentication errors
@@ -47,13 +48,13 @@ export default function AuthPage() {
     }
 
     // Check if user is already authenticated
-    getSession().then((session) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         const redirectUrl = callbackUrl || "/dashboard"
         router.push(redirectUrl)
       }
     })
-  }, [searchParams, router])
+  }, [searchParams, router, supabase])
 
   const handleGoogleSignIn = async () => {
     try {
@@ -63,31 +64,18 @@ export default function AuthPage() {
 
       const callbackUrl = searchParams.get("callbackUrl") || "/dashboard"
 
-      // Try the sign-in
-      const result = await signIn("google", {
-        callbackUrl,
-        redirect: false,
+      // Try the sign-in with Supabase Auth
+      const { data, error: signInError } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback?callbackUrl=${encodeURIComponent(callbackUrl)}`,
+        },
       })
 
-      if (result?.error) {
-        if (result.error === "Configuration") {
-          setError("Authentication service configuration error. Please verify client credentials.")
-        } else if (result.error === "AccessDenied") {
-          setError("Access denied. Please try again or use another account.")
-        } else {
-          setError(`Google sign-in failed: ${result.error}`)
-        }
-      } else if (result?.ok) {
-        setSuccess("Sign-in successful! Redirecting you...")
-        setTimeout(() => {
-          router.push(callbackUrl)
-        }, 800)
-      } else if (result?.url) {
-        setSuccess("Redirecting to Google...")
-        window.location.href = result.url
+      if (signInError) {
+        setError(`Google sign-in failed: ${signInError.message}`)
       } else {
         setSuccess("Redirecting to Google...")
-        window.location.href = `/api/auth/signin/google?callbackUrl=${encodeURIComponent(callbackUrl)}`
       }
     } catch (err) {
       console.error("Google sign-in error:", err)

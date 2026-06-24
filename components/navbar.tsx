@@ -15,7 +15,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Menu, LogOut, User, Settings, Leaf } from "lucide-react"
-import { useSession, signOut } from "next-auth/react"
+import { useSession, signOut } from "@/components/session-provider"
 import { usePathname } from "next/navigation"
 
 export function Navbar() {
