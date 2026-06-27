@@ -1,52 +1,54 @@
 # 🌿 Greenify — AI-Powered Plant Disease Detection & Care Platform
 
 [![Next.js 15](https://img.shields.io/badge/Next.js-15.5-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![React 19](https://img.shields.io/badge/React-19.0-blue?style=for-the-badge&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![TailwindCSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
-[![Fal AI](https://img.shields.io/badge/AI-Fal_Serverless-orange?style=for-the-badge)](https://fal.ai/)
-[![NextAuth](https://img.shields.io/badge/Auth-NextAuth.js-green?style=for-the-badge)](https://next-auth.js.org/)
+[![Supabase](https://img.shields.io/badge/Supabase-Database%20%26%20Auth-green?style=for-the-badge&logo=supabase)](https://supabase.com/)
 
-Greenify is a state-of-the-art, AI-powered web application designed to help farmers, gardeners, and plant enthusiasts identify, diagnose, and treat plant diseases in real time. Leveraging Next.js 15, Fal AI's deep learning plant disease detection models, and the expert-curated PlantVillage dataset, Greenify provides immediate and actionable treatment recommendations, preventive tips, and historical health analytics.
+Greenify is a state-of-the-art, AI-powered web application designed to help farmers, gardeners, and plant enthusiasts identify, diagnose, and treat plant diseases in real time. Leveraging Next.js 15, a local FastAPI inference backend powered by PyTorch/Transformers, and Supabase Database & Auth, Greenify provides immediate crop leaf classification, organic/chemical treatment guides, scan analytics, and a comprehensive administration dashboard.
 
 ---
 
 ## ✨ Features
 
-- **🔍 AI-Powered Disease Detection**
-  - Instant diagnosis by uploading crop images (supports JPG, PNG, WebP).
-  - Automated image compression on the client side for optimized bandwidth and rapid AI inference.
-  - Multi-class confidence rating, severity levels (Critical, High, Medium, Low, None), and full list of symptoms & causes.
-
-- **📚 Interactive Plant Disease Encyclopedia**
-  - Explore 38 disease classes spanning 14 agricultural crop species (e.g., Apple, Tomato, Potato, Grape, Corn, Orange).
-  - Searchable database featuring auto-suggested filters and animated placeholders for a premium search experience.
-  - Sourced directly from the benchmark PlantVillage Dataset of over 50,000 expert-validated crop leaf images.
+- **🔍 Two-Stage AI Inference Pipeline**
+  - **Stage 1 (Leaf Validation)**: Lightweight MobileNetV2 classifier validates if the uploaded image contains a plant leaf, rejecting non-plant images (e.g. human faces, animals).
+  - **Stage 2 (Disease Classification)**: Pretrained Hugging Face MobileNetV2 plant disease classifier categorizes crop foliage into 26 disease classes across 14 agricultural plant species.
+  - Supports instant JPG, PNG, JPEG, and WebP uploads.
 
 - **📊 Personal Plant Health Dashboard**
-  - Track plant health metrics over time.
-  - Manage scan history, success rate (Healthy vs. Diseased scans), and average confidence scoring.
-  - Quick actions for single/bulk uploads and scheduling agricultural maintenance tasks.
+  - Track individual plant health metrics, disease histories, and scan confidence averages.
+  - Interactive scans list with detailed dynamic report pages (`/dashboard/scans/[id]`) showing inline caret information (Symptoms, Causes, Treatment, and Prevention) fetched from a shared database.
+  - Easy deletion of scan records.
 
-- **🔐 Secure Google OAuth Authentication**
-  - Protected dashboard and scan history features.
-  - Google Account integration enabled via NextAuth.js middleware guards.
+- **🛡️ Complete Admin Panel (`/admin`)**
+  - Access control: Restricts access to authenticated administrators (based on role database column and email whitelist rules). Redirects unauthorized queries to a 403 page.
+  - Real-time statistics: Total registered users, total scans completed, diseased vs. healthy ratios, average model confidence, and database storage utilization.
+  - User Directory: Search and filter profiles, inspect scan history lists per user, and delete user profiles with cascading diagnosis removal.
+
+- **⚙️ Settings Page Integration**
+  - Interactive profile picture container supporting avatar image uploads directly to Supabase storage.
+  - Shortened unique User ID formatting to protect account metadata.
+
+- **🔐 Supabase Google OAuth Authentication**
+  - Unified **"Get Started"** button in the Navbar that triggers Google OAuth immediately.
+  - Session guards (`AuthGuard`) protecting the Dashboard, Settings, and Admin Panel routes.
 
 - **🌓 Premium UI & Dark Mode**
-  - Beautiful custom design with modern typography (Outfit/Inter).
-  - Glassmorphic card layouts, smooth gradients, and micro-animations.
-  - Complete dark mode support via `next-themes`.
+  - Custom dark and light themes using Outfit/Inter typography, smooth gradients, and glassmorphic micro-animations.
 
 ---
 
 ## 🛠️ Technology Stack
 
-- **Framework**: [Next.js 15.5](https://nextjs.org/) (App Router, Server Actions)
-- **Library**: [React 19](https://react.dev/) & [TypeScript](https://www.typescriptlang.org/)
-- **AI Integration**: [Fal AI Serverless Client](https://fal.ai/) (using `fal-ai/plant-disease-detection` model)
-- **Authentication**: [NextAuth.js v4](https://next-auth.js.org/) (Google OAuth Provider)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) & CSS Variables
-- **UI Components**: [Shadcn UI](https://ui.shadcn.com/) (Radix UI primitives, Lucide Icons, Embla Carousel, Sonner toast, Vaul drawers)
+- **Frontend**: Next.js 15.5 (App Router, Client & Server Components)
+- **Backend API**: FastAPI (Python 3.10+ web framework)
+- **Machine Learning**: PyTorch, Hugging Face `transformers` (MobileNetV2 models)
+- **Authentication**: Supabase Auth (Google OAuth Provider)
+- **Database & Storage**: Supabase Postgres & Storage buckets (`plant-images`)
+- **Styling**: Tailwind CSS & CSS Variables
+- **UI Components**: Shadcn UI (Lucide Icons, Sonner toast, Radix primitives)
 
 ---
 
@@ -55,77 +57,74 @@ Greenify is a state-of-the-art, AI-powered web application designed to help farm
 ```text
 greenify-web-application/
 ├── app/                        # Next.js App Router
-│   ├── about/                  # About page
-│   ├── actions/                # Server Actions (e.g., Fal AI plant analysis)
-│   ├── api/                    # API routes (Auth handlers & tests)
-│   ├── auth/                   # Authentication sign-in/up views
-│   ├── contact/                # Contact page
-│   ├── dashboard/              # Protected User Dashboard
-│   ├── disease-detection/      # Image upload & AI disease detection workflow
-│   ├── disease-info/           # PlantVillage disease search & database
+│   ├── admin/                  # Admin Dashboard (Access guarded)
+│   ├── auth/                   # Auth handlers & callback routing
+│   ├── dashboard/              # User Dashboard & scans/[id] detail page
+│   ├── disease-detection/      # Image uploads & AI validation/prediction view
+│   ├── disease-info/           # PlantVillage encyclopedia dynamic route
+│   ├── settings/               # User preferences & profile photo uploads
+│   ├── unauthorized/           # 403 Access Denied redirect page
 │   ├── globals.css             # Main styling & theme definitions
-│   ├── layout.tsx              # Root Layout, Providers (Theme, Session)
-│   └── page.tsx                # Landing Homepage
+│   └── page.tsx                # Landing Homepage with server-side live stats
+├── backend/                    # FastAPI Inference Backend
+│   ├── app.py                  # API endpoints, CORS configurations, and checks
+│   ├── leaf_classifier.py      # MobileNetV2 leaf validator loader & runner
+│   ├── predict.py              # MobileNetV2 plant disease classifier loader & runner
+│   ├── requirements.txt        # Backend python dependencies (CPU-optimized)
+│   └── model/                  # Local Hugging Face model config & weights
 ├── components/                 # Shared UI and Layout components
-│   ├── ui/                     # Shadcn UI primitives (Buttons, Cards, Badges, etc.)
-│   ├── navbar.tsx              # Header & Responsive Navigation
-│   ├── footer.tsx              # Base Footer with links
-│   └── env-validator.tsx       # Developer helper to check local env status
-├── docs/                       # Technical & configuration guides
-│   └── environment-setup.md    # Google OAuth client & redirect URI manual
-├── hooks/                      # Custom React hooks
-├── lib/                        # Helper utilities (image compressors, classes)
-├── styles/                     # Supplementary CSS modules & variables
-├── tailwind.config.ts          # Tailwind CSS theme configuration
-└── package.json                # Project dependencies and script runner
+│   ├── navbar.tsx              # Unified header & Auth menu triggers
+│   └── session-provider.tsx    # Supabase session provider & dynamic profile role loaders
+├── lib/                        # Helper utilities (auth checking, disease database)
+│   ├── auth-utils.ts           # Admin verification utilities
+│   └── disease-db.ts           # Shared disease encyclopedia configurations
+└── package.json                # Frontend dependencies and scripts
 ```
 
 ---
 
 ## ⚙️ Environment Configuration
 
-Greenify requires configuration of both **Google OAuth Credentials** for authentication and a **Fal AI API Key** for plant disease analysis. 
-
-Create a `.env.local` file in your root directory and configure the variables as follows:
+Create a `.env.local` file in your root folder:
 
 ```env
-# Fal AI Key (For plant disease detection analysis)
-FAL_KEY=your_fal_ai_api_key_here
+# Supabase Database Settings
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anonymous_key
 
-# Google OAuth Configuration
-GOOGLE_CLIENT_ID=your_google_client_id_here
-GOOGLE_CLIENT_SECRET=your_google_client_secret_here
-
-# NextAuth Configuration
-NEXTAUTH_SECRET=your_nextauth_secret_minimum_32_characters
-NEXTAUTH_URL=http://localhost:3000
+# Local/Remote FastAPI Backend API URL
+NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
 ```
-
-> [!NOTE]
-> For instructions on setting up Google Cloud Console and authorized redirect URIs, refer to the [Environment Setup Guide](file:///c:/Users/Hp/Downloads/greenify-web-application/docs/environment-setup.md).
 
 ---
 
 ## 🚀 Getting Started
 
-To run Greenify locally, follow these steps:
-
-### 1. Prerequisites
-Ensure you have [Node.js (v18 or higher)](https://nodejs.org/) installed.
-
-### 2. Install Dependencies
-Clone the repository, navigate to the folder, and install all required Node modules:
+### 1. Start the FastAPI Backend
+Navigate to the `backend/` directory, install requirements, and run the server:
 ```bash
-npm install
+# Navigate to backend
+cd backend
+
+# Install dependencies (CPU-optimized PyTorch specified)
+pip install -r requirements.txt
+
+# Run the Uvicorn development server
+python -m uvicorn app:app --host 127.0.0.1 --port 8000
 ```
 
-### 3. Run Development Server
-Start the local server on [http://localhost:3000](http://localhost:3000):
+### 2. Start the Next.js Frontend
+Open a new terminal in the project root, install packages, and launch Next.js:
 ```bash
+# Install packages
+npm install
+
+# Run the Next.js development server
 npm run dev
 ```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 4. Build for Production
+### 3. Build for Production
 To compile and test the production-optimized build:
 ```bash
 # Build the application
@@ -137,30 +136,9 @@ npm start
 
 ---
 
-## 🔬 AI Analysis Workflow
+## 🔬 Inference & Data Pipeline
 
-1. **Client-side Compression**: When an image is uploaded via the **Disease Detection Page**, it is processed by the helper function in `lib/image-utils.ts` to shrink size and limit bandwidth usage.
-2. **Serverless Upload**: The client calls the server action `analyzePlantImage` in `app/actions/analyze-plant.ts` containing the base64 string. The image is uploaded securely to Fal AI's CDN storage.
-3. **Inference**: The server subscribes to `fal-ai/plant-disease-detection` with the image URL.
-4. **Data Normalization**: Predictions are mapped against our localized severity and care databases to generate interactive treatment guides, preventing the display of raw machine-learning output to the end user.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these guidelines:
-1. Fork the project.
-2. Create a feature branch: `git checkout -b feature/NewFeature`.
-3. Commit your changes: `git commit -m 'Add some NewFeature'`.
-4. Push to the branch: `git push origin feature/NewFeature`.
-5. Open a Pull Request.
-
----
-
-## 📝 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
----
-
-*Greenify is built to empower growers. If you like this project, please consider giving it a star! ⭐*
+1. **Upload**: User uploads leaf image inside `/disease-detection`.
+2. **Leaf Shape Check**: Next.js sends image to `POST /predict`. FastAPI backend delegates to `leaf_classifier.py` using `google/mobilenet_v2_1.0_224` to confirm leaf presence. If verification fails, it aborts.
+3. **Classification**: If verification passes, it runs `predict.py` using the disease model, extracting predicted class, confidence, severity, and computed disease slug.
+4. **Display**: Next.js receives slug, stores scan history into Supabase `diagnoses`, and retrieves detailed care guidance from the shared `diseaseDatabase` inline.
