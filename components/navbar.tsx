@@ -14,14 +14,29 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { Menu, LogOut, User, Settings, Leaf } from "lucide-react"
+import { Menu, LogOut, User, Settings, Leaf, ShieldAlert } from "lucide-react"
 import { useSession, signOut } from "@/components/session-provider"
 import { usePathname } from "next/navigation"
+import { isAdmin } from "@/lib/auth-utils"
+import { createClient } from "@/lib/supabase/client"
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const { data: session, status } = useSession()
   const pathname = usePathname()
+
+  const handleGetStarted = async () => {
+    const supabase = createClient()
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?callbackUrl=${encodeURIComponent("/dashboard")}`,
+        queryParams: {
+          prompt: "select_account",
+        },
+      },
+    })
+  }
   const isAuthPage = pathname === "/auth"
 
   const navLinks = [
@@ -98,6 +113,14 @@ export function Navbar() {
                       Dashboard
                     </Link>
                   </DropdownMenuItem>
+                  {isAdmin(session?.user?.email, (session?.user as any)?.role) && (
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin" className="cursor-pointer font-bold text-emerald-600 dark:text-emerald-400">
+                        <ShieldAlert className="mr-2 h-4 w-4" />
+                        Admin Panel
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem asChild>
                     <Link href="/settings" className="cursor-pointer">
                       <Settings className="mr-2 h-4 w-4" />
@@ -112,18 +135,13 @@ export function Navbar() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <>
-                <Link href="/auth?tab=login">
-                  <Button variant="outline" size="sm" className="border-[#2C6455] text-[#2C6455] hover:bg-[#2C6455]/10 px-4">
-                    Login
-                  </Button>
-                </Link>
-                <Link href="/auth?tab=signup">
-                  <Button size="sm" className="bg-gradient-to-r from-[#2C6455] to-[#1a3d35] hover:from-[#1a3d35] hover:to-[#2C6455] text-white px-4 rounded-lg font-semibold shadow-md">
-                    Sign Up
-                  </Button>
-                </Link>
-              </>
+              <Button
+                onClick={handleGetStarted}
+                size="sm"
+                className="bg-gradient-to-r from-[#2C6455] to-[#1a3d35] hover:from-[#1a3d35] hover:to-[#2C6455] text-white px-4 rounded-lg font-semibold shadow-md cursor-pointer animate-fade-in"
+              >
+                Get Started
+              </Button>
             )}
           </div>
 
@@ -183,6 +201,14 @@ export function Navbar() {
                             Dashboard
                           </Button>
                         </Link>
+                        {isAdmin(session?.user?.email, (session?.user as any)?.role) && (
+                          <Link href="/admin" onClick={() => setIsOpen(false)}>
+                            <Button variant="outline" className="w-full justify-start border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-500/5 hover:bg-emerald-500/10">
+                              <ShieldAlert className="mr-2 h-4 w-4" />
+                              Admin Panel
+                            </Button>
+                          </Link>
+                        )}
                         <Link href="/settings" onClick={() => setIsOpen(false)}>
                           <Button variant="outline" className="w-full justify-start">
                             <Settings className="mr-2 h-4 w-4" />
@@ -203,20 +229,16 @@ export function Navbar() {
                       </div>
                     </div>
                   ) : (
-                    <div className="flex flex-col space-y-2 pt-2">
-                      <Link href="/auth?tab=login" onClick={() => setIsOpen(false)}>
-                        <Button
-                          variant="outline"
-                          className="w-full border-[#2C6455] text-[#2C6455] hover:bg-[#2C6455]/10"
-                        >
-                          Login
-                        </Button>
-                      </Link>
-                      <Link href="/auth?tab=signup" onClick={() => setIsOpen(false)}>
-                        <Button className="w-full bg-gradient-to-r from-[#2C6455] to-[#1a3d35] hover:from-[#1a3d35] hover:to-[#2C6455] text-white">
-                          Sign Up
-                        </Button>
-                      </Link>
+                    <div className="pt-2">
+                      <Button
+                        onClick={() => {
+                          handleGetStarted()
+                          setIsOpen(false)
+                        }}
+                        className="w-full bg-gradient-to-r from-[#2C6455] to-[#1a3d35] hover:from-[#1a3d35] hover:to-[#2C6455] text-white rounded-lg font-semibold shadow-md cursor-pointer"
+                      >
+                        Get Started
+                      </Button>
                     </div>
                   )}
                 </div>

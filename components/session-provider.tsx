@@ -8,52 +8,64 @@ import type { User, Session } from "@supabase/supabase-js"
 interface SessionContextType {
   session: Session | null
   user: User | null
+  profileRole: string | null
   status: "authenticated" | "unauthenticated" | "loading"
 }
 
 const SessionContext = createContext<SessionContextType>({
   session: null,
   user: null,
+  profileRole: null,
   status: "loading",
 })
 
 export function AuthSessionProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
   const [user, setUser] = useState<User | null>(null)
+  const [profileRole, setProfileRole] = useState<string | null>(null)
   const [status, setStatus] = useState<"authenticated" | "unauthenticated" | "loading">("loading")
   const supabase = createClient()
 
   useEffect(() => {
     const syncProfile = async (u: User) => {
       try {
-        await supabase.from("profiles").upsert({
+        const { data } = await supabase.from("profiles").upsert({
           id: u.id,
           full_name: u.user_metadata?.full_name || u.email?.split("@")[0],
           email: u.email,
           avatar_url: u.user_metadata?.avatar_url || u.user_metadata?.picture,
-        })
+        }).select("role").maybeSingle()
+        if (data) {
+          setProfileRole(data.role)
+        }
       } catch (err) {
         console.error("Error syncing profile:", err)
       }
     }
 
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setSession(session)
       setUser(session?.user ?? null)
       setStatus(session ? "authenticated" : "unauthenticated")
       if (session?.user) {
+        const { data } = await supabase.from("profiles").select("role").eq("id", session.user.id).maybeSingle()
+        if (data) setProfileRole(data.role)
         syncProfile(session.user)
       }
     })
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session)
       setUser(session?.user ?? null)
       setStatus(session ? "authenticated" : "unauthenticated")
       if (session?.user) {
+        const { data } = await supabase.from("profiles").select("role").eq("id", session.user.id).maybeSingle()
+        if (data) setProfileRole(data.role)
         syncProfile(session.user)
+      } else {
+        setProfileRole(null)
       }
     })
 
@@ -63,7 +75,7 @@ export function AuthSessionProvider({ children }: { children: React.ReactNode })
   }, [supabase])
 
   return (
-    <SessionContext.Provider value={{ session, user, status }}>
+    <SessionContext.Provider value={{ session, user, profileRole, status }}>
       {children}
     </SessionContext.Provider>
   )
@@ -83,6 +95,7 @@ export function useSession() {
         email: context.user?.email,
         image: context.user?.user_metadata?.avatar_url || context.user?.user_metadata?.picture,
         createdAt: context.user?.created_at,
+        role: context.profileRole,
       }
     } : null,
     status: context.status,

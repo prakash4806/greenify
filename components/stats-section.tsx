@@ -1,9 +1,20 @@
-export function StatsSection() {
+import { diseaseDatabase } from "@/lib/disease-db"
+
+interface StatsSectionProps {
+  usersCount: number
+  scansCount: number
+}
+
+export function StatsSection({ usersCount, scansCount }: StatsSectionProps) {
+  const uniquePlants = new Set(Object.values(diseaseDatabase).map((d: any) => d.plant))
+  const supportedPlantsCount = uniquePlants.size
+  const supportedDiseasesCount = Object.keys(diseaseDatabase).length
+
   const stats = [
-    { number: "95%", label: "Accuracy Rate", description: "Disease detection accuracy" },
-    { number: "50K+", label: "Plants Diagnosed", description: "Successfully analyzed" },
-    { number: "100+", label: "Plant Species", description: "Supported varieties" },
-    { number: "24/7", label: "Available", description: "Instant diagnosis anytime" },
+    { number: String(usersCount), label: "Total Registered Users", description: "Active plant growers" },
+    { number: String(scansCount), label: "Total Scans", description: "AI plant health diagnoses" },
+    { number: String(supportedDiseasesCount), label: "Supported Diseases", description: "Diagnosable symptoms" },
+    { number: String(supportedPlantsCount), label: "Supported Plants", description: "Supported plant species" },
   ]
 
   return (

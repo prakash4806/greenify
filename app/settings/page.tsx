@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
 import { AuthGuard } from "@/components/auth-guard"
-import { User, ShieldAlert, Monitor, Bell, Palette, Settings, ExternalLink, Calendar, Check, LogOut, KeyRound } from "lucide-react"
+import { User, ShieldAlert, Monitor, Bell, Palette, Settings, ExternalLink, Calendar, Check, LogOut, KeyRound, Camera, Loader2 } from "lucide-react"
 import Link from "next/link"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useTheme } from "next-themes"
 import { createClient } from "@/lib/supabase/client"
 import { toast } from "sonner"
@@ -20,6 +20,8 @@ function SettingsContent() {
   const [authUser, setAuthUser] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [imageError, setImageError] = useState(false)
+  const avatarInputRef = useRef<HTMLInputElement>(null)
+  const [isUploading, setIsUploading] = useState(false)
 
   // Notification Preferences States
   const [emailNotif, setEmailNotif] = useState(true)
@@ -107,6 +109,58 @@ function SettingsContent() {
       })
     : "N/A"
 
+  const handleAvatarChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file || !session?.user?.id) return
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please upload a valid image file.")
+      return
+    }
+
+    setIsUploading(true)
+    try {
+      const supabase = createClient()
+      
+      // Upload to Supabase Storage
+      const fileExt = file.name.split(".").pop() || "jpg"
+      const fileName = `${session.user.id}/avatar-${Date.now()}.${fileExt}`
+      const { error: uploadError } = await supabase.storage
+        .from("plant-images")
+        .upload(fileName, file, {
+          cacheControl: "3600",
+          upsert: true
+        })
+
+      if (uploadError) throw uploadError
+
+      // Get Public URL
+      const { data: urlData } = supabase.storage
+        .from("plant-images")
+        .getPublicUrl(fileName)
+      
+      const publicUrl = urlData.publicUrl
+
+      // Update profiles database table
+      const { error: dbError } = await supabase
+        .from("profiles")
+        .update({ avatar_url: publicUrl })
+        .eq("id", session.user.id)
+
+      if (dbError) throw dbError
+
+      // Update state
+      setProfile((prev: any) => (prev ? { ...prev, avatar_url: publicUrl } : { avatar_url: publicUrl }))
+      setImageError(false)
+      toast.success("Profile picture updated successfully!")
+    } catch (err: any) {
+      console.error("Avatar upload failed:", err)
+      toast.error(err.message || "Failed to upload avatar.")
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
   const handleSignOut = async () => {
     await signOut()
   }
@@ -158,21 +212,40 @@ function SettingsContent() {
               </CardHeader>
               <CardContent className="p-5 pt-0">
                 <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
-                  <div className="flex-shrink-0">
-                    {hasAvatar ? (
-                      <div className="relative w-16 h-16">
+                  <div className="flex-shrink-0 relative group">
+                    <input
+                      type="file"
+                      ref={avatarInputRef}
+                      accept="image/*"
+                      onChange={handleAvatarChange}
+                      className="hidden"
+                    />
+                    <div
+                      onClick={() => !isUploading && avatarInputRef.current?.click()}
+                      className={`w-16 h-16 rounded-full overflow-hidden border-2 border-emerald-500/20 shadow-md cursor-pointer hover:opacity-85 transition-opacity relative flex items-center justify-center bg-gray-100 dark:bg-gray-800 ${
+                        isUploading ? "opacity-50 pointer-events-none" : ""
+                      }`}
+                    >
+                      {isUploading ? (
+                        <Loader2 className="w-5 h-5 animate-spin text-[#2C6455] dark:text-emerald-400" />
+                      ) : hasAvatar ? (
                         <img
                           src={avatarUrl}
                           alt="Profile Avatar"
                           onError={() => setImageError(true)}
-                          className="rounded-full w-full h-full object-cover border-2 border-emerald-500/20 shadow-md"
+                          className="w-full h-full object-cover"
                         />
-                      </div>
-                    ) : (
-                      <div className="w-16 h-16 rounded-full bg-emerald-600/10 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 flex items-center justify-center font-bold text-xl border border-emerald-500/20 shadow-sm flex-shrink-0">
-                        {getInitials()}
-                      </div>
-                    )}
+                      ) : (
+                        <div className="w-full h-full text-emerald-700 dark:text-emerald-400 flex items-center justify-center font-bold text-xl">
+                          {getInitials()}
+                        </div>
+                      )}
+                      {!isUploading && (
+                        <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                           <Camera className="w-4 h-4 text-white" />
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <div className="flex-1 w-full grid grid-cols-1 sm:grid-cols-2 gap-4 text-center sm:text-left">
@@ -342,7 +415,9 @@ function SettingsContent() {
               <CardContent className="p-5 pt-0 space-y-3 text-xs">
                 <div className="flex justify-between border-b pb-2 border-gray-100 dark:border-gray-750">
                   <span className="text-gray-500 font-semibold">User Unique ID</span>
-                  <span className="font-mono text-gray-900 dark:text-gray-300 break-all select-all">{authUser?.id || "N/A"}</span>
+                  <span className="font-mono text-gray-900 dark:text-gray-300 select-all" title={authUser?.id}>
+                    {authUser?.id ? `${authUser.id.slice(0, 8)}...` : "N/A"}
+                  </span>
                 </div>
                 <div className="flex justify-between border-b pb-2 border-gray-100 dark:border-gray-750">
                   <span className="text-gray-500 font-semibold">Account Created</span>

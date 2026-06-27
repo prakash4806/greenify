@@ -452,7 +452,7 @@ function DashboardContent() {
                                   <span>Confidence: {scan.confidence}%</span>
                                 </div>
                               </div>
-                              <Link href={`/disease-info/${scan.disease_name.toLowerCase().replace(/\s+/g, "-")}`}>
+                              <Link href={`/dashboard/scans/${scan.id}`}>
                                 <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                                   <Eye className="h-3.5 w-3.5" />
                                 </Button>
