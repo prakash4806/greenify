@@ -1,5 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "About Greenify",
+  description:
+    "Learn about Greenify, our AI-powered plant disease diagnosis platform, and our mission to support modern agriculture.",
+  alternatives: {
+    canonical: "/about",
+  },
+}
 import {
   Leaf,
   ShieldCheck,

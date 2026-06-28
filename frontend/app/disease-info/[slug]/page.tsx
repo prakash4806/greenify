@@ -6,11 +6,32 @@ import { ArrowLeft, AlertTriangle, CheckCircle, Info, Leaf } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { diseaseDatabase } from "@/lib/disease-db"
+import type { Metadata } from "next"
 
 interface PageProps {
   params: Promise<{
     slug: string
   }>
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const resolvedParams = await params
+  const disease = diseaseDatabase[resolvedParams.slug]
+
+  if (!disease) {
+    return {
+      title: "Disease Not Found | Greenify",
+      description: "The requested plant disease page could not be found.",
+    }
+  }
+
+  return {
+    title: `${disease.name} Disease | Greenify`,
+    description: `Learn about ${disease.name} symptoms, causes, AI detection, treatment methods, and prevention techniques.`,
+    alternatives: {
+      canonical: `/disease-info/${resolvedParams.slug}`,
+    },
+  }
 }
 
 export default async function DiseaseDetailPage({ params }: PageProps) {

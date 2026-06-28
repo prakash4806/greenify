@@ -5,6 +5,16 @@ import { StatsSection } from "@/components/stats-section"
 import { TestimonialsSection } from "@/components/testimonials-section"
 import { CTASection } from "@/components/cta-section"
 import { createClient } from "@supabase/supabase-js"
+import type { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Greenify | AI Plant Disease Detection",
+  description:
+    "Upload plant images and receive AI-powered disease diagnosis with treatment and prevention recommendations.",
+  alternatives: {
+    canonical: "/",
+  },
+}
 
 export const dynamic = "force-dynamic"
 
