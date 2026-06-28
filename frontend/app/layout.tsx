@@ -1,4 +1,4 @@
-import type React from "react"
+import React, { Suspense } from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
@@ -9,6 +9,7 @@ import { ScrollToTop } from "@/components/scroll-to-top"
 import { ThemeProvider } from "@/components/theme-provider"
 import { AuthSessionProvider } from "@/components/session-provider"
 import { Toaster } from "@/components/ui/sonner"
+import AnalyticsClarity from "@/components/analytics-clarity"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -89,6 +90,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <AuthSessionProvider>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+            <Suspense fallback={null}>
+              <AnalyticsClarity />
+            </Suspense>
             <Preloader />
             <Navbar />
             <main className="min-h-screen">{children}</main>

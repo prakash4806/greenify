@@ -7,6 +7,7 @@ import { Mail, MessageSquare, HelpCircle, Lightbulb, CheckCircle } from "lucide-
 import Link from "next/link"
 import type { Metadata } from "next"
 import { JsonLd, getContactSchema, getBreadcrumbSchema } from "@/lib/seo-utils"
+import { Breadcrumb } from "@/components/breadcrumb"
 
 export const metadata: Metadata = {
   title: "Contact Us | Greenify",
@@ -55,6 +56,9 @@ export default function ContactPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50/30 to-teal-50 dark:from-slate-900 dark:via-emerald-950/30 dark:to-teal-950 transition-colors duration-300">
       <JsonLd data={contactSchema} />
       <JsonLd data={breadcrumbSchema} />
+      <div className="w-full max-w-[90vw] mx-auto px-4 pt-16 -mb-12">
+        <Breadcrumb items={[{ name: "Contact", href: "/contact" }]} />
+      </div>
       {/* Header Section */}
       <div className="w-full max-w-[90vw] mx-auto px-4 pt-20 pb-10">
         <div className="max-w-4xl mx-auto">

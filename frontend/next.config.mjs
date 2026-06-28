@@ -3,9 +3,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  images: {
-    unoptimized: true,
-  },
+  images: {},
   outputFileTracingRoot: process.cwd(),
   async headers() {
     return [

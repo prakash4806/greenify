@@ -8,6 +8,7 @@ import { notFound } from "next/navigation"
 import { diseaseDatabase } from "@/lib/disease-db"
 import type { Metadata } from "next"
 import { JsonLd, getMedicalConditionSchema, getBreadcrumbSchema } from "@/lib/seo-utils"
+import { Breadcrumb } from "@/components/breadcrumb"
 
 interface PageProps {
   params: Promise<{
@@ -42,6 +43,25 @@ export default async function DiseaseDetailPage({ params }: PageProps) {
   if (!disease) {
     notFound()
   }
+
+  // Find related diseases (same plant crop first, then others)
+  let related = Object.entries(diseaseDatabase)
+    .filter(([slug, item]) => item.plant === disease.plant && slug !== resolvedParams.slug)
+    .slice(0, 3)
+
+  if (related.length < 3) {
+    const extra = Object.entries(diseaseDatabase)
+      .filter(([slug, item]) => item.plant !== disease.plant && slug !== resolvedParams.slug)
+      .slice(0, 3 - related.length)
+    related = [...related, ...extra]
+  }
+
+  const relatedDiseases = related.map(([slug, item]) => ({
+    slug,
+    name: item.name,
+    plant: item.plant,
+    severity: item.severity,
+  }))
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -80,6 +100,12 @@ export default async function DiseaseDetailPage({ params }: PageProps) {
       <JsonLd data={medicalSchema} />
       <JsonLd data={breadcrumbSchema} />
       <div className="max-w-4xl mx-auto">
+        <Breadcrumb
+          items={[
+            { name: "Disease Library", href: "/disease-info" },
+            { name: disease.name, href: `/disease-info/${resolvedParams.slug}` }
+          ]}
+        />
         {/* Back Button */}
         <Link href="/disease-info">
           <Button variant="outline" size="sm" className="mb-4 h-8 text-xs">
@@ -208,6 +234,30 @@ export default async function DiseaseDetailPage({ params }: PageProps) {
               Contact Expert
             </Button>
           </Link>
+        </div>
+
+        {/* Related Diseases Section */}
+        <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-800">
+          <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-4">Related Disease Library Guides</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {relatedDiseases.map((rel, index) => (
+              <Link key={index} href={`/disease-info/${rel.slug}`}>
+                <Card className="hover:shadow-md transition-shadow hover:border-[#2C6455]/30 cursor-pointer h-full bg-white/40 dark:bg-gray-800/40">
+                  <CardHeader className="p-4 pb-1">
+                    <CardTitle className="text-xs font-semibold text-gray-900 dark:text-white leading-tight">
+                      {rel.name}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4 pt-1">
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500 mb-2">{rel.plant}</p>
+                    <Badge className={`text-[9px] px-1.5 py-0 ${getSeverityColor(rel.severity)}`}>
+                      {rel.severity}
+                    </Badge>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </div>

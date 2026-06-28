@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -11,6 +12,8 @@ import Link from "next/link"
 export default function DiseaseInfoClient() {
   const [searchTerm, setSearchTerm] = useState("")
   const [isSearchFocused, setIsSearchFocused] = useState(false)
+  const [focusedIndex, setFocusedIndex] = useState(-1)
+  const router = useRouter()
 
   // PlantVillage Dataset diseases
   const plantDiseases = [
@@ -93,6 +96,62 @@ export default function DiseaseInfoClient() {
       plant.diseases.some((disease) => disease.name.toLowerCase().includes(searchTerm.toLowerCase())),
   )
 
+  const allDiseases = plantDiseases.flatMap((p) =>
+    p.diseases.map((d) => ({
+      ...d,
+      plant: p.plant,
+    }))
+  )
+
+  const searchSuggestions = searchTerm
+    ? allDiseases.filter(
+        (d) =>
+          d.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          d.plant.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : []
+
+  const highlightMatch = (text: string, query: string) => {
+    if (!query) return text
+    const parts = text.split(new RegExp(`(${query})`, "gi"))
+    return (
+      <>
+        {parts.map((part, i) =>
+          part.toLowerCase() === query.toLowerCase() ? (
+            <mark key={i} className="bg-yellow-100 dark:bg-yellow-950/40 text-[#2C6455] dark:text-emerald-400 font-bold px-0.5 rounded">
+              {part}
+            </mark>
+          ) : (
+            part
+          )
+        )}
+      </>
+    )
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (searchSuggestions.length === 0) return
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault()
+      setFocusedIndex((prev) => (prev + 1) % Math.min(searchSuggestions.length, 5))
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault()
+      setFocusedIndex((prev) => (prev - 1 + Math.min(searchSuggestions.length, 5)) % Math.min(searchSuggestions.length, 5))
+    } else if (e.key === "Enter") {
+      e.preventDefault()
+      if (focusedIndex >= 0 && focusedIndex < Math.min(searchSuggestions.length, 5)) {
+        const selected = searchSuggestions[focusedIndex]
+        setSearchTerm("")
+        setFocusedIndex(-1)
+        router.push(`/disease-info/${selected.slug}`)
+      }
+    } else if (e.key === "Escape") {
+      setFocusedIndex(-1)
+      setIsSearchFocused(false)
+    }
+  }
+
   const getSeverityColor = (severity: string) => {
     switch (severity) {
       case "Critical":
@@ -126,9 +185,16 @@ export default function DiseaseInfoClient() {
                 <Input
                   type="text"
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value)
+                    setFocusedIndex(-1)
+                  }}
                   onFocus={() => setIsSearchFocused(true)}
-                  onBlur={() => setIsSearchFocused(false)}
+                  onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)} // delay to allow clicks
+                  onKeyDown={handleKeyDown}
+                  role="combobox"
+                  aria-expanded={isSearchFocused && searchSuggestions.length > 0}
+                  aria-autocomplete="list"
                   className="w-full h-12 pl-5 pr-14 text-base bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 rounded-xl shadow-md focus:border-[#2C6455] dark:focus:border-emerald-400 focus:ring-4 focus:ring-[#2C6455]/10 dark:focus:ring-emerald-400/10 transition-all duration-300 placeholder:text-gray-400 dark:placeholder:text-gray-500"
                   placeholder=""
                 />
@@ -146,6 +212,48 @@ export default function DiseaseInfoClient() {
                     <Search className="h-4 w-4 text-white" />
                   </div>
                 </div>
+
+                {/* Autocomplete Dropdown list */}
+                {isSearchFocused && searchSuggestions.length > 0 && (
+                  <div
+                    role="listbox"
+                    aria-label="Disease search suggestions"
+                    className="absolute left-0 right-0 mt-2 bg-white dark:bg-gray-850 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-50 overflow-hidden divide-y divide-gray-100 dark:divide-gray-800/60 text-left"
+                    onMouseDown={(e) => e.preventDefault()}
+                  >
+                    {searchSuggestions.slice(0, 5).map((suggestion, index) => {
+                      const isFocused = index === focusedIndex
+                      return (
+                        <div
+                          key={suggestion.slug}
+                          role="option"
+                          aria-selected={isFocused}
+                          onClick={() => {
+                            setSearchTerm("")
+                            setFocusedIndex(-1)
+                            router.push(`/disease-info/${suggestion.slug}`)
+                          }}
+                          className={`flex items-center justify-between px-4 py-2.5 cursor-pointer text-xs transition-colors ${
+                            isFocused
+                              ? "bg-[#2C6455]/10 text-[#2C6455] dark:text-emerald-400 font-bold"
+                              : "hover:bg-gray-50 dark:hover:bg-gray-800/40 text-gray-700 dark:text-gray-300"
+                          }`}
+                        >
+                          <div className="flex items-center space-x-2">
+                            <Leaf className="w-3.5 h-3.5 text-gray-400" />
+                            <span>
+                              {highlightMatch(suggestion.name, searchTerm)}
+                              <span className="text-gray-400 dark:text-gray-500 ml-1">({suggestion.plant})</span>
+                            </span>
+                          </div>
+                          <Badge className={`text-[10px] px-1.5 py-0 ${getSeverityColor(suggestion.severity)}`}>
+                            {suggestion.severity}
+                          </Badge>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
 
               {/* Search suggestions/pills */}
