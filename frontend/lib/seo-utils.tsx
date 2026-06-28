@@ -4,7 +4,7 @@ import { diseaseDatabase } from "@/lib/disease-db"
 // Base URL helper
 export const getBaseUrl = (): string => {
   return process.env.NEXT_PUBLIC_SITE_URL
-    ? `https://${process.env.NEXT_PUBLIC_SITE_URL.replace(/^https?:\/\//, "")}`
+    ? (process.env.NEXT_PUBLIC_SITE_URL.startsWith("http") ? process.env.NEXT_PUBLIC_SITE_URL : `https://${process.env.NEXT_PUBLIC_SITE_URL}`)
     : "https://greenify-web-application.vercel.app"
 }
 
