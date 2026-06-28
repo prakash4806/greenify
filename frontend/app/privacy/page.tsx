@@ -3,6 +3,9 @@ import Link from "next/link"
 export const metadata = {
   title: "Privacy Policy | Greenify",
   description: "Privacy Policy for Greenify - Learn how we collect, use, and protect your data",
+  alternatives: {
+    canonical: "/privacy",
+  },
 }
 
 export default function PrivacyPage() {

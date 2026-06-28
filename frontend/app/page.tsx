@@ -6,6 +6,7 @@ import { TestimonialsSection } from "@/components/testimonials-section"
 import { CTASection } from "@/components/cta-section"
 import { createClient } from "@supabase/supabase-js"
 import type { Metadata } from "next"
+import { JsonLd, getWebAppSchema, getBreadcrumbSchema } from "@/lib/seo-utils"
 
 export const metadata: Metadata = {
   title: "Greenify | AI Plant Disease Detection",
@@ -40,8 +41,15 @@ export default async function HomePage() {
     console.error("Error fetching landing page database statistics:", err)
   }
 
+  const webAppSchema = getWebAppSchema()
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: "Home", item: "/" }
+  ])
+
   return (
     <div className="fade-in">
+      <JsonLd data={webAppSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <HeroSection />
       <OverviewSection />
       <FeaturesSection />

@@ -7,6 +7,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { diseaseDatabase } from "@/lib/disease-db"
 import type { Metadata } from "next"
+import { JsonLd, getMedicalConditionSchema, getBreadcrumbSchema } from "@/lib/seo-utils"
 
 interface PageProps {
   params: Promise<{
@@ -67,8 +68,17 @@ export default async function DiseaseDetailPage({ params }: PageProps) {
     }
   }
 
+  const medicalSchema = getMedicalConditionSchema(disease)
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: "Home", item: "/" },
+    { name: "Disease Library", item: "/disease-info" },
+    { name: disease.name, item: `/disease-info/${resolvedParams.slug}` }
+  ])
+
   return (
     <div className="container mx-auto px-4 py-6 pt-20 fade-in">
+      <JsonLd data={medicalSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <div className="max-w-4xl mx-auto">
         {/* Back Button */}
         <Link href="/disease-info">

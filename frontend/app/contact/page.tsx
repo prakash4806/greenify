@@ -5,6 +5,17 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Mail, MessageSquare, HelpCircle, Lightbulb, CheckCircle } from "lucide-react"
 import Link from "next/link"
+import type { Metadata } from "next"
+import { JsonLd, getContactSchema, getBreadcrumbSchema } from "@/lib/seo-utils"
+
+export const metadata: Metadata = {
+  title: "Contact Us | Greenify",
+  description:
+    "Get in touch with Greenify for support, feedback, general inquiries, or crop model suggestions.",
+  alternatives: {
+    canonical: "/contact",
+  },
+}
 
 export default function ContactPage() {
   const faqs = [
@@ -34,8 +45,16 @@ export default function ContactPage() {
     },
   ]
 
+  const contactSchema = getContactSchema()
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: "Home", item: "/" },
+    { name: "Contact", item: "/contact" }
+  ])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50/30 to-teal-50 dark:from-slate-900 dark:via-emerald-950/30 dark:to-teal-950 transition-colors duration-300">
+      <JsonLd data={contactSchema} />
+      <JsonLd data={breadcrumbSchema} />
       {/* Header Section */}
       <div className="w-full max-w-[90vw] mx-auto px-4 pt-20 pb-10">
         <div className="max-w-4xl mx-auto">

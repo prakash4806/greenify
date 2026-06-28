@@ -3,6 +3,9 @@ import Link from "next/link"
 export const metadata = {
   title: "Terms and Conditions | Greenify",
   description: "Terms and Conditions for using Greenify - AI-powered plant disease detection platform",
+  alternatives: {
+    canonical: "/terms",
+  },
 }
 
 export default function TermsPage() {

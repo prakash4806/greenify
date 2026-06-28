@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import type { Metadata } from "next"
+import { JsonLd, getOrganizationSchema, getBreadcrumbSchema } from "@/lib/seo-utils"
 
 export const metadata: Metadata = {
   title: "About Greenify",
@@ -65,8 +66,16 @@ export default function AboutPage() {
     { name: "Python", description: "Robust backend for AI model inference" },
   ]
 
+  const orgSchema = getOrganizationSchema()
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: "Home", item: "/" },
+    { name: "About", item: "/about" }
+  ])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50/30 to-teal-50 dark:from-slate-900 dark:via-emerald-950/30 dark:to-teal-950 transition-colors duration-300">
+      <JsonLd data={orgSchema} />
+      <JsonLd data={breadcrumbSchema} />
       {/* Hero Section */}
       <div className="min-h-[50vh] flex items-center justify-center pt-20 pb-10 lg:py-16 relative overflow-hidden">
         {/* Background decorative elements */}

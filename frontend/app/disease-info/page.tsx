@@ -10,6 +10,18 @@ export const metadata: Metadata = {
   },
 }
 
+import { JsonLd, getBreadcrumbSchema } from "@/lib/seo-utils"
+
 export default function DiseaseInfoPage() {
-  return <DiseaseInfoClient />
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: "Home", item: "/" },
+    { name: "Disease Library", item: "/disease-info" }
+  ])
+
+  return (
+    <>
+      <JsonLd data={breadcrumbSchema} />
+      <DiseaseInfoClient />
+    </>
+  )
 }

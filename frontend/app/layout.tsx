@@ -16,8 +16,13 @@ const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
   ? `https://${process.env.NEXT_PUBLIC_SITE_URL.replace(/^https?:\/\//, "")}`
   : "https://greenify-web-application.vercel.app"
 
+export const viewport = {
+  themeColor: "#2c6455",
+}
+
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
+  manifest: "/site.webmanifest",
   title: "Greenify - AI Plant Disease Detection & Diagnosis",
   description:
     "Greenify is an AI-powered plant disease detection platform that identifies crop and leaf diseases from uploaded images. Get instant diagnosis, treatment recommendations, and prevention methods using advanced machine learning.",
