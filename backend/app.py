@@ -147,3 +147,16 @@ async def predict(file: UploadFile = File(None)):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Prediction failed: {str(e)}"
         )
+
+
+@app.get("/")
+def root():
+    return {
+        "message": "Greenify API is running",
+        "version": MODEL_VERSION
+    }
+
+
+@app.get("/healthz")
+def health():
+    return {"status": "healthy"}
