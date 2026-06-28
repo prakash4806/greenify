@@ -56,36 +56,35 @@ Greenify is a state-of-the-art, AI-powered web application designed to help farm
 
 ```text
 greenify-web-application/
-├── app/                        # Next.js App Router
-│   ├── admin/                  # Admin Dashboard (Access guarded)
-│   ├── auth/                   # Auth handlers & callback routing
-│   ├── dashboard/              # User Dashboard & scans/[id] detail page
-│   ├── disease-detection/      # Image uploads & AI validation/prediction view
-│   ├── disease-info/           # PlantVillage encyclopedia dynamic route
-│   ├── settings/               # User preferences & profile photo uploads
-│   ├── unauthorized/           # 403 Access Denied redirect page
-│   ├── globals.css             # Main styling & theme definitions
-│   └── page.tsx                # Landing Homepage with server-side live stats
-├── backend/                    # FastAPI Inference Backend
-│   ├── app.py                  # API endpoints, CORS configurations, and checks
-│   ├── leaf_classifier.py      # MobileNetV2 leaf validator loader & runner
-│   ├── predict.py              # MobileNetV2 plant disease classifier loader & runner
-│   ├── requirements.txt        # Backend python dependencies (CPU-optimized)
-│   └── model/                  # Local Hugging Face model config & weights
-├── components/                 # Shared UI and Layout components
-│   ├── navbar.tsx              # Unified header & Auth menu triggers
-│   └── session-provider.tsx    # Supabase session provider & dynamic profile role loaders
-├── lib/                        # Helper utilities (auth checking, disease database)
-│   ├── auth-utils.ts           # Admin verification utilities
-│   └── disease-db.ts           # Shared disease encyclopedia configurations
-└── package.json                # Frontend dependencies and scripts
+├── frontend/                   # Next.js 15 Client-Side Web App
+│   ├── app/                    # Next.js App Router pages
+│   │   ├── admin/              # Administration panel (access-restricted)
+│   │   ├── auth/               # OAuth callbacks and login redirects
+│   │   ├── dashboard/          # User diagnosis statistics & scans detail views
+│   │   ├── disease-detection/  # Two-stage AI leaf validation and analysis views
+│   │   ├── disease-info/       # Crop disease lookup catalog
+│   │   └── settings/           # User configuration, avatar image upload handlers
+│   ├── components/             # Reusable UI & Navbar/Header links
+│   ├── docs/                   # Configuration setups
+│   ├── lib/                    # Helpers, admin check utils, shared catalog lookup
+│   ├── public/                 # Static logo & hero banner graphics
+│   ├── tailwind.config.ts      # Styles configuration
+│   └── package.json            # Node project configuration
+├── backend/                    # FastAPI AI Inference Server
+│   ├── app.py                  # API endpoints, leaf validation validation, prediction routing
+│   ├── leaf_classifier.py      # Leaf check MobileNetV2 loader & validator
+│   ├── predict.py              # Crop disease MobileNetV2 predictor
+│   ├── requirements.txt        # Backend dependencies (PyTorch CPU spec)
+│   └── model/                  # Classification models configuration & weights
+├── .gitignore                  # Multi-service recursive gitignores
+└── README.md                   # Platform documentation
 ```
 
 ---
 
 ## ⚙️ Environment Configuration
 
-Create a `.env.local` file in your root folder:
+Create a `.env.local` file inside the `frontend/` directory:
 
 ```env
 # Supabase Database Settings
@@ -114,8 +113,11 @@ python -m uvicorn app:app --host 127.0.0.1 --port 8000
 ```
 
 ### 2. Start the Next.js Frontend
-Open a new terminal in the project root, install packages, and launch Next.js:
+Navigate to the `frontend/` directory, install packages, and launch Next.js:
 ```bash
+# Navigate to frontend
+cd frontend
+
 # Install packages
 npm install
 
@@ -124,9 +126,12 @@ npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 3. Build for Production
-To compile and test the production-optimized build:
+### 3. Build for Production (Frontend)
+To compile and test the production-optimized frontend build:
 ```bash
+# Navigate to frontend
+cd frontend
+
 # Build the application
 npm run build
 
