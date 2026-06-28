@@ -1,5 +1,7 @@
 # 🌿 Greenify — AI-Powered Plant Disease Detection & Care Platform
 
+### Deployed Web Application: [https://greenify-dun.vercel.app/](https://greenify-dun.vercel.app/)
+
 [![Next.js 15](https://img.shields.io/badge/Next.js-15.5-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![React 19](https://img.shields.io/badge/React-19.0-blue?style=for-the-badge&logo=react)](https://react.dev/)
