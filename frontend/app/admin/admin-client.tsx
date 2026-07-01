@@ -28,6 +28,7 @@ import {
 import { isAdmin } from "@/lib/auth-utils"
 import { toast } from "sonner"
 import { AuthGuard } from "@/components/auth-guard"
+import { FeedbackManagement } from "@/components/feedback-management"
 
 function AdminPanelContent() {
   const { data: session, status } = useSession()
@@ -38,6 +39,7 @@ function AdminPanelContent() {
   const [scans, setScans] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
+  const [activeTab, setActiveTab] = useState<"users" | "feedback">("users")
   
   // Selected user for inspection details modal
   const [selectedUser, setSelectedUser] = useState<any | null>(null)
@@ -71,8 +73,13 @@ function AdminPanelContent() {
       setUsers(profilesRes.data || [])
       setScans(diagnosesRes.data || [])
     } catch (err: any) {
-      console.error("Admin data fetch failed:", err)
-      toast.error("Failed to load administration database records.")
+      console.error("Admin data fetch failed:", {
+        message: err.message,
+        details: err.details,
+        hint: err.hint,
+        code: err.code
+      })
+      toast.error(err.message || "Failed to load administration database records.")
     } finally {
       setLoading(false)
     }
@@ -100,9 +107,14 @@ function AdminPanelContent() {
         
       if (error) throw error
       setSelectedUserScans(data || [])
-    } catch (err) {
-      console.error("Failed to load scans for user:", err)
-      toast.error("Failed to fetch user's diagnostics history.")
+    } catch (err: any) {
+      console.error("Failed to load scans for user:", {
+        message: err.message,
+        details: err.details,
+        hint: err.hint,
+        code: err.code
+      })
+      toast.error(err.message || "Failed to fetch user's diagnostics history.")
     } finally {
       setModalLoading(false)
     }
@@ -126,7 +138,12 @@ function AdminPanelContent() {
       setScans((prev) => prev.filter((s) => s.id !== scanId))
       toast.success("Scan deleted successfully.")
     } catch (err: any) {
-      console.error("Delete scan failed:", err)
+      console.error("Delete scan failed:", {
+        message: err.message,
+        details: err.details,
+        hint: err.hint,
+        code: err.code
+      })
       toast.error(err.message || "Failed to delete scan record.")
     }
   }
@@ -166,7 +183,12 @@ function AdminPanelContent() {
         setSelectedUser(null)
       }
     } catch (err: any) {
-      console.error("Delete user cascade failed:", err)
+      console.error("Delete user cascade failed:", {
+        message: err.message,
+        details: err.details,
+        hint: err.hint,
+        code: err.code
+      })
       toast.error(err.message || "Failed to delete user profile.")
     } finally {
       setDeletingUserId(null)
@@ -320,9 +342,34 @@ function AdminPanelContent() {
             </Card>
           </div>
 
-          {/* User Management Section */}
-          <Card className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-white/40 dark:border-gray-700/40 shadow-xl rounded-xl">
-            <CardHeader className="p-5 pb-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          {/* Tab Selector */}
+          <div className="flex border-b border-gray-200 dark:border-gray-800 space-x-4">
+            <button
+              onClick={() => setActiveTab("users")}
+              className={`px-4 py-2 text-xs font-bold transition-all border-b-2 -mb-[2px] ${
+                activeTab === "users"
+                  ? "border-[#2C6455] text-[#2C6455] dark:border-emerald-400 dark:text-emerald-400 font-extrabold"
+                  : "border-transparent text-gray-500 hover:text-gray-800"
+              }`}
+            >
+              User Directory
+            </button>
+            <button
+              onClick={() => setActiveTab("feedback")}
+              className={`px-4 py-2 text-xs font-bold transition-all border-b-2 -mb-[2px] ${
+                activeTab === "feedback"
+                  ? "border-[#2C6455] text-[#2C6455] dark:border-emerald-400 dark:text-emerald-400 font-extrabold"
+                  : "border-transparent text-gray-500 hover:text-gray-800"
+              }`}
+            >
+              Feedback Moderation
+            </button>
+          </div>
+
+          {activeTab === "users" ? (
+            /* User Management Section */
+            <Card className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-white/40 dark:border-gray-700/40 shadow-xl rounded-xl">
+              <CardHeader className="p-5 pb-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
                 <CardTitle className="text-base font-bold text-[#2C6455] dark:text-emerald-400">User Profiles Directory</CardTitle>
                 <CardDescription className="text-xs">
@@ -415,6 +462,9 @@ function AdminPanelContent() {
               )}
             </CardContent>
           </Card>
+          ) : (
+            <FeedbackManagement />
+          )}
         </div>
       </div>
 

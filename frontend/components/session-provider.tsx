@@ -4,6 +4,7 @@ import type React from "react"
 import { createContext, useContext, useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 import type { User, Session } from "@supabase/supabase-js"
+import { isAdmin } from "@/lib/auth-utils"
 
 interface SessionContextType {
   session: Session | null
@@ -34,6 +35,10 @@ export function AuthSessionProvider({ children }: { children: React.ReactNode })
           full_name: u.user_metadata?.full_name || u.email?.split("@")[0],
           email: u.email,
           avatar_url: u.user_metadata?.avatar_url || u.user_metadata?.picture,
+          // Fix: Sync the role column to "admin" if the user has administrative privileges,
+          // so that Supabase Row Level Security (RLS) policies allow them to read all user profiles
+          // in the Admin User Directory.
+          role: isAdmin(u.email) ? "admin" : "user",
         }).select("role").maybeSingle()
         if (data) {
           setProfileRole(data.role)

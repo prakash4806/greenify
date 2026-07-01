@@ -14,6 +14,9 @@ import { createClient } from "@/lib/supabase/client"
 import { useSession } from "@/components/session-provider"
 import { useRouter } from "next/navigation"
 import { diseaseDatabase } from "@/lib/disease-db"
+import { FeedbackModal } from "@/components/feedback/FeedbackModal"
+import { FeedbackCTA } from "@/components/feedback/FeedbackCTA"
+import { X } from "lucide-react"
 
 interface TopPrediction {
   disease: string
@@ -49,6 +52,20 @@ export default function DiseaseDetectionClient() {
   // Save states
   const [isSaving, setIsSaving] = useState(false)
   const [isSaved, setIsSaved] = useState(false)
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false)
+  const [isFeedbackSubmittedForCurrentScan, setIsFeedbackSubmittedForCurrentScan] = useState(false)
+
+  // Listen to searchParams on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const searchParams = new URLSearchParams(window.location.search)
+      if (searchParams.get("openFeedback") === "true" && session?.user?.id) {
+        setIsFeedbackModalOpen(true)
+        // Clean URL query parameter so it doesn't open on reload
+        router.replace("/disease-detection", { scroll: false })
+      }
+    }
+  }, [session, router])
 
   const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
 
@@ -437,6 +454,7 @@ export default function DiseaseDetectionClient() {
     setResults(null)
     setErrorMsg(null)
     setIsSaved(false)
+    setIsFeedbackSubmittedForCurrentScan(false)
   }
 
   return (
@@ -762,6 +780,27 @@ export default function DiseaseDetectionClient() {
                 </div>
               </CardContent>
             </Card>
+          )}
+
+          {/* Feedback Section */}
+          {results && (
+            <>
+              <FeedbackCTA
+                onClick={() => {
+                  if (session?.user?.id) {
+                    setIsFeedbackModalOpen(true)
+                  } else {
+                    router.push(`/auth?callbackUrl=${encodeURIComponent("/disease-detection?openFeedback=true")}`)
+                  }
+                }}
+              />
+              <FeedbackModal
+                isOpen={isFeedbackModalOpen}
+                onClose={() => setIsFeedbackModalOpen(false)}
+                userId={session?.user?.id || ""}
+                onSuccess={() => setIsFeedbackSubmittedForCurrentScan(true)}
+              />
+            </>
           )}
 
           {/* Tips Section */}

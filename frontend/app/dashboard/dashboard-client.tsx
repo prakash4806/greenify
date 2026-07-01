@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { AuthGuard } from "@/components/auth-guard"
 import { Camera, Clock, Leaf, TrendingUp, Eye, User, Calendar } from "lucide-react"
-import Image from "next/image"
 import Link from "next/link"
+import Image from "next/image"
+import { UserAvatar } from "@/components/ui/avatar"
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
 
@@ -16,7 +17,6 @@ function DashboardContent() {
   const [profile, setProfile] = useState<any>(null)
   const [diagnoses, setDiagnoses] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [imageError, setImageError] = useState(false)
 
   useEffect(() => {
     if (!session?.user?.id) return
@@ -62,10 +62,7 @@ function DashboardContent() {
     fetchDashboardData()
   }, [session?.user?.id])
 
-  // Reset imageError state when profile avatar URL changes
-  useEffect(() => {
-    setImageError(false)
-  }, [profile?.avatar_url, session?.user?.image])
+
 
   const totalScans = diagnoses.length
   const hasData = totalScans > 0
@@ -232,16 +229,7 @@ function DashboardContent() {
     : "N/A"
 
   const avatarUrl = profile?.avatar_url || session?.user?.image
-  const hasAvatar = avatarUrl && !imageError
 
-  const getInitials = () => {
-    const name = profile?.full_name || session?.user?.name || "User"
-    const parts = name.split(" ")
-    if (parts.length >= 2) {
-      return `${parts[0].charAt(0)}${parts[1].charAt(0)}`.toUpperCase()
-    }
-    return name.charAt(0).toUpperCase()
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50/30 to-teal-50 dark:from-slate-900 dark:via-emerald-950/30 dark:to-teal-950 transition-colors duration-300">
@@ -274,22 +262,11 @@ function DashboardContent() {
             <CardContent className="p-5 pt-0">
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
                 {/* User Avatar */}
-                <div className="flex-shrink-0">
-                  {hasAvatar ? (
-                    <div className="relative w-14 h-14 md:w-16 md:h-16">
-                      <img
-                        src={avatarUrl}
-                        alt="Profile Avatar"
-                        onError={() => setImageError(true)}
-                        className="rounded-full w-full h-full object-cover border-2 border-emerald-500/20 shadow-md"
-                      />
-                    </div>
-                  ) : (
-                    <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-emerald-600/10 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400 flex items-center justify-center font-bold text-lg md:text-xl border border-emerald-500/20 shadow-sm flex-shrink-0">
-                      {getInitials()}
-                    </div>
-                  )}
-                </div>
+                <UserAvatar
+                  src={avatarUrl}
+                  name={profile?.full_name || session?.user?.name}
+                  className="w-14 h-14 md:w-16 md:h-16 border-2 border-emerald-500/20 shadow-md flex-shrink-0"
+                />
 
                 {/* Account Details */}
                 <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-4 text-center sm:text-left">

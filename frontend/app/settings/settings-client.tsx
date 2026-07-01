@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
 import { AuthGuard } from "@/components/auth-guard"
+import { UserAvatar } from "@/components/ui/avatar"
 import { User, ShieldAlert, Monitor, Bell, Palette, Settings, ExternalLink, Calendar, Check, LogOut, KeyRound, Camera, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
@@ -79,17 +80,7 @@ function SettingsContent() {
     toast.success("Preferences updated successfully!")
   }
 
-  const getInitials = () => {
-    const name = profile?.full_name || session?.user?.name || "User"
-    const parts = name.split(" ")
-    if (parts.length >= 2) {
-      return `${parts[0].charAt(0)}${parts[1].charAt(0)}`.toUpperCase()
-    }
-    return name.charAt(0).toUpperCase()
-  }
-
   const avatarUrl = profile?.avatar_url || session?.user?.image
-  const hasAvatar = avatarUrl && !imageError
 
   const formattedCreated = authUser?.created_at
     ? new Date(authUser.created_at).toLocaleDateString("en-US", {
@@ -228,17 +219,12 @@ function SettingsContent() {
                     >
                       {isUploading ? (
                         <Loader2 className="w-5 h-5 animate-spin text-[#2C6455] dark:text-emerald-400" />
-                      ) : hasAvatar ? (
-                        <img
-                          src={avatarUrl}
-                          alt="Profile Avatar"
-                          onError={() => setImageError(true)}
-                          className="w-full h-full object-cover"
-                        />
                       ) : (
-                        <div className="w-full h-full text-emerald-700 dark:text-emerald-400 flex items-center justify-center font-bold text-xl">
-                          {getInitials()}
-                        </div>
+                        <UserAvatar
+                          src={avatarUrl}
+                          name={profile?.full_name || session?.user?.name}
+                          className="w-full h-full"
+                        />
                       )}
                       {!isUploading && (
                         <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">

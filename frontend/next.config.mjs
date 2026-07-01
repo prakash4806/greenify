@@ -3,7 +3,18 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  images: {},
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
+    ],
+  },
   outputFileTracingRoot: process.cwd(),
   async headers() {
     return [
@@ -32,7 +43,7 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.supabase.co https://*.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://*.supabase.co https://*.railway.app https://*.render.com https://*.vercel.app http://localhost:8000 http://127.0.0.1:8000; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.railway.app https://*.render.com http://localhost:8000 http://127.0.0.1:8000; media-src 'self'; object-src 'none'; frame-ancestors 'none';"
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.supabase.co https://*.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://*.supabase.co https://*.railway.app https://*.render.com https://*.vercel.app https://lh3.googleusercontent.com http://localhost:8000 http://127.0.0.1:8000; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.railway.app https://*.render.com http://localhost:8000 http://127.0.0.1:8000; media-src 'self'; object-src 'none'; frame-ancestors 'none';"
           }
         ],
       },

@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { UserAvatar } from "@/components/ui/avatar"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Menu, LogOut, User, Settings, Leaf, ShieldAlert } from "lucide-react"
 import { useSession, signOut } from "@/components/session-provider"
@@ -91,12 +91,7 @@ export function Navbar() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={session.user?.image || ""} alt={session.user?.name || ""} />
-                      <AvatarFallback className="bg-[#2C6455] text-white text-xs">
-                        {session.user?.name?.charAt(0) || "U"}
-                      </AvatarFallback>
-                    </Avatar>
+                    <UserAvatar src={session.user?.image} name={session.user?.name} className="h-8 w-8" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -183,12 +178,7 @@ export function Navbar() {
                   {session ? (
                     <div className="pt-4 border-t">
                       <div className="flex items-center space-x-3 mb-4">
-                        <Avatar className="h-10 w-10">
-                          <AvatarImage src={session.user?.image || ""} alt={session.user?.name || ""} />
-                          <AvatarFallback className="bg-[#2C6455] text-white">
-                            {session.user?.name?.charAt(0) || "U"}
-                          </AvatarFallback>
-                        </Avatar>
+                        <UserAvatar src={session.user?.image} name={session.user?.name} className="h-10 w-10" />
                         <div>
                           <p className="text-sm font-medium">{session.user?.name}</p>
                           <p className="text-xs text-gray-500">{session.user?.email}</p>

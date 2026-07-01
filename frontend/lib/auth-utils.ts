@@ -8,7 +8,7 @@ export function isAdmin(email: string | null | undefined, role?: string | null |
   const lowerEmail = email.toLowerCase()
   return (
     lowerEmail === "admin@greenify.com" ||
-    lowerEmail === "prakashmahato4806@gmail.com" ||
+    lowerEmail === "prakash.other.4806@gmail.com" ||
     lowerEmail.includes("admin") ||
     lowerEmail.endsWith("@greenify.com")
   )

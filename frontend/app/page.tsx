@@ -22,6 +22,7 @@ export const dynamic = "force-dynamic"
 export default async function HomePage() {
   let usersCount = 0
   let scansCount = 0
+  let reviews: any[] = []
 
   try {
     const supabase = createClient(
@@ -29,14 +30,24 @@ export default async function HomePage() {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "placeholder-anon-key"
     )
     
-    // Parallel exact count requests
-    const [profilesRes, diagnosesRes] = await Promise.all([
+    // Parallel database requests
+    const [profilesRes, diagnosesRes, feedbackRes] = await Promise.all([
       supabase.from("profiles").select("id", { count: "exact", head: true }),
-      supabase.from("diagnoses").select("id", { count: "exact", head: true })
+      supabase.from("diagnoses").select("id", { count: "exact", head: true }),
+      supabase.from("feedback")
+        .select("id, rating, title, message, is_approved, is_featured, created_at, profiles(full_name, avatar_url)")
+        .eq("is_approved", true)
+        .eq("is_featured", true)
+        .order("created_at", { ascending: false })
+        .limit(3)
     ])
     
     usersCount = profilesRes.count ?? 0
     scansCount = diagnosesRes.count ?? 0
+
+    if (!feedbackRes.error && feedbackRes.data) {
+      reviews = feedbackRes.data
+    }
   } catch (err) {
     console.error("Error fetching landing page database statistics:", err)
   }
@@ -54,7 +65,7 @@ export default async function HomePage() {
       <OverviewSection />
       <FeaturesSection />
       <StatsSection usersCount={usersCount} scansCount={scansCount} />
-      <TestimonialsSection />
+      <TestimonialsSection reviews={reviews} />
       <CTASection />
     </div>
   )
